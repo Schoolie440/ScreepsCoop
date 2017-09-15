@@ -1,3 +1,5 @@
+
+//TODO: Make a module to get creeps to move to new room and help colonize
 var handlerOtherRoom = {
     run: function(creep,Room) {
         

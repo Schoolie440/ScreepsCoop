@@ -2,9 +2,9 @@ var towerControls = {
     
     attack: function(tower) {
         if(tower) {
-            var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-            if(closestHostile) {
-                tower.attack(closestHostile);
+            var hostiles = tower.room.find(FIND_HOSTILE_CREEPS);
+            if(hostiles.length) {
+                tower.attack(hostiles[0]);
             }
         }
     },

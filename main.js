@@ -12,13 +12,15 @@ var handlerArmySpawn = require('handler.armySpawn');
 
 module.exports.loop = function () {
     
+    //Finds all towers
     var towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
     
+    //Operates towers (attack, repair, repairWalls, combo)
     for(i=0; i<towers.length; i++) {
         towerControls.attack(towers[i]);
     }
 
-
+    //Loops through all creeps and calls their assigned operation modules
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         if(creep.memory.role == 'harvester') {
@@ -41,10 +43,12 @@ module.exports.loop = function () {
         }
     }
     
-    
+    //loops through all spawns and runs auto spawn module
     for(var i in Game.spawns) {
+        //checks if enemies present in room
         var enemies = Game.spawns[i].room.find(FIND_HOSTILE_CREEPS);
         
+        //if enemies present, shut down regular creep production, start military
         if(enemies.length) {
             handlerArmySpawn.run(Game.spawns[i]);
         }
@@ -53,7 +57,7 @@ module.exports.loop = function () {
         }
     }
     
-    
+    //deletes dead creeps from memory
     for(var i in Memory.creeps) {
         if(!Game.creeps[i]) {
             delete Memory.creeps[i];
