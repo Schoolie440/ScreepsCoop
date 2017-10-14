@@ -1,14 +1,23 @@
+
+//set of tower control functions
 var towerControls = {
     
+    //attacks healers first, then nearest enemy
     attack: function(tower) {
-        if(tower) {
-            var hostiles = tower.room.find(FIND_HOSTILE_CREEPS);
-            if(hostiles.length) {
-                tower.attack(hostiles[0]);
+        var hostileHealers = tower.room.find(FIND_HOSTILE_CREEPS, { filter: (creep) => (creep.getActiveBodyparts(HEAL) > 0) });
+        
+        if(hostileHealers.length) {
+            tower.attack(hostileHealers[0]);
+        }
+        else {
+            var target = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+            if(target) {
+                tower.attack(target);
             }
         }
     },
     
+    //Repairs walls/ramparts only, choosing proportionally weakest first
     repairWalls: function(tower) {
         if(tower) {
             const targets = tower.room.find(FIND_STRUCTURES, {
@@ -24,6 +33,7 @@ var towerControls = {
         }
     },
     
+    //repairs roads only, choosing proportionally weakes first
     repairRoads: function(tower) {
         if(tower) {
             const targets = tower.room.find(FIND_STRUCTURES, {
@@ -38,7 +48,7 @@ var towerControls = {
                 
         }
     },
-    
+    //repairs anything, proportionally weakest first
     repairAll: function(tower) {
         if(tower) {
             const targets = tower.room.find(FIND_STRUCTURES, {
@@ -53,6 +63,7 @@ var towerControls = {
         }
     },
     
+    //repairs down to half energy, prioritizes attack in any instance
     combo: function(tower) {
         
         var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);

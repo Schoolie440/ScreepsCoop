@@ -5,6 +5,8 @@ var constructRoads = {
         //find spawns/sources
         var sources = room.find(FIND_SOURCES);
         var spawners = room.find(FIND_MY_SPAWNS);
+        var extensions = room.find(FIND_MY_STRUCTURES, {filter: { structureType: STRUCTURE_EXTENSION }});
+        
         
         //loop through spawns/sources, find paths, create construction sites 
         for(var i in sources) {
@@ -21,6 +23,15 @@ var constructRoads = {
                 room.createConstructionSite(path[l].x,path[l].y, STRUCTURE_ROAD);
             }
         }
+        
+        
+        for(var m in extensions) {
+            room.createConstructionSite(extensions[m].pos.x + 1, extensions[m].pos.y, STRUCTURE_ROAD);
+            room.createConstructionSite(extensions[m].pos.x - 1, extensions[m].pos.y, STRUCTURE_ROAD);
+            room.createConstructionSite(extensions[m].pos.x, extensions[m].pos.y + 1, STRUCTURE_ROAD);
+            room.createConstructionSite(extensions[m].pos.x, extensions[m].pos.y - 1, STRUCTURE_ROAD);
+        }
+    
     }
 }
 

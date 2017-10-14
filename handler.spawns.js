@@ -6,7 +6,8 @@ var handlerSpawns = {
         var upgraders = _.filter(spawn.room.find(FIND_MY_CREEPS), (creep) => creep.memory.role == 'upgrader');
         var builders = _.filter(spawn.room.find(FIND_MY_CREEPS), (creep) => creep.memory.role == 'builder');
         var towerCaddies = _.filter(spawn.room.find(FIND_MY_CREEPS), (creep) => creep.memory.role == 'towerCaddy');
-        var claimer = _.filter(spawn.room.find(FIND_MY_CREEPS), (creep) => creep.memory.role == 'claimer');
+        var claimers = _.filter(spawn.room.find(FIND_MY_CREEPS), (creep) => creep.memory.role == 'claimer');
+        var miners = _.filter(spawn.room.find(FIND_MY_CREEPS), (creep) => creep.memory.role == 'miners');
         
         //determine desired amounts of each body part
         var energyCap = spawn.room.energyCapacityAvailable;
@@ -14,6 +15,12 @@ var handlerSpawns = {
         var works = Math.floor(hundreds*1/3);
         var carries = Math.floor(hundreds*1/3);
         var moves = Math.floor(hundreds*1/3);
+        
+        var bodyPartCap = 12;
+        
+        if(works+carries+moves > bodyPartCap) {
+            works = carries = moves = bodyPartCap/3;
+        }
         
         var bodyParts = [];
         
@@ -32,12 +39,12 @@ var handlerSpawns = {
         var make = false;
         
         //create creep using determined parts/roles
-        if(harvesters.length < 4) {
+        if(harvesters.length < 2) {
             newRole = 'harvester';
             make = true;
             
         }
-        else if(builders.length < 4) {
+        else if(builders.length < 3) {
             newRole = 'builder';
             make = true;
         }
@@ -45,10 +52,15 @@ var handlerSpawns = {
             var newRole = 'upgrader';
             make = true;
         }
+        /*else if(miners.length < 4 && spawn.room.find(FIND_STRUCTURES, {filter: (structure) => {return(structure.structureType == STRUCTURE_EXTRACTOR)}}) && spawn.room.find(FIND_MINERALS, {filter: (mineral) => {return(mineral.mineralAmount > 0)}})) {
+            newRole = 'miner';
+            make = true;
+        }*/
         else if(towerCaddies.length < 2) {
             newRole = 'towerCaddy';
             make = true;
         }
+        
         //spawn creep, if conditions are correct
         if(make) { 
             spawn.createCreep(bodyParts,null,{role: newRole, working: false});

@@ -1,5 +1,5 @@
 var roleTowerCaddy = {
-
+    //tower caddy module, prioritizes towers, acts like harvester otherwise
     /** @param {Creep} creep **/
      run: function(creep) {
 	    

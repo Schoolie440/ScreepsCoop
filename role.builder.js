@@ -29,8 +29,8 @@ var roleBuilder = {
             else if(creep.memory.target == null) {
                 //find roads with <90% hits
                 var targets = creep.room.find(FIND_STRUCTURES, {filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_ROAD) &&
-                            structure.hits < structure.hitsMax*9/10;}})
+                        return (structure.structureType == STRUCTURE_ROAD || structure.structureType == STRUCTURE_CONTAINER) &&
+                            structure.hits < structure.hitsMax*9/10}});
                 //sort weakest to strongest
                 targets.sort((a,b) => a.hits/a.hitsMax - b.hits/b.hitsMax);
                 
@@ -72,15 +72,19 @@ var roleBuilder = {
             }
             //if we already have a target
             else {
+                //repair the target
                 if(creep.repair(Game.getObjectById(creep.memory.target)) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(Game.getObjectById(creep.memory.target));
                 }
+                //if we finish the target, clear and get a new one
                 if(Game.getObjectById(creep.memory.target).hits == Game.getObjectById(creep.memory.target).hitsMax) {
                     creep.memory.target = null;
                 }
             }
 	    }
+	    //if not working...
 	    else {
+	        //find source, get energy
 	        var closeSource = creep.pos.findClosestByPath(FIND_SOURCES);
             if(creep.harvest(closeSource) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(closeSource);
