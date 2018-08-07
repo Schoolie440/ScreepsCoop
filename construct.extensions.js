@@ -3,20 +3,22 @@ utilityFunctions = require('utilityFunctions');
 
 var constructExtensions = {
     run: function(room) {
-        //find spawns/sources
-        var sources = room.find(FIND_SOURCES);
+        
+        //find spawns
         var spawners = room.find(FIND_MY_SPAWNS);
         
-        for(var i in spawners) {
-            var source = spawners[i].pos.findClosestByRange(FIND_SOURCES);
-        }
+        var source = spawners[0].pos.findClosestByRange(FIND_SOURCES);
         
         var p = utilityFunctions.findNextExtPos(source);
         
-        
-        console.log("construct at: " + p.x + " " + p.y)
-        room.createConstructionSite(p.x, p.y, STRUCTURE_EXTENSION);
-        
+        if(p != {x: 0, y: 0}) {
+            console.log("construct at: " + p.x + " " + p.y)
+            room.createConstructionSite(p.x, p.y, STRUCTURE_EXTENSION);
+            room.createConstructionSite(p.x + 1, p.y, STRUCTURE_ROAD);
+            room.createConstructionSite(p.x - 1, p.y, STRUCTURE_ROAD);
+            room.createConstructionSite(p.x, p.y + 1, STRUCTURE_ROAD);
+            room.createConstructionSite(p.x, p.y - 1, STRUCTURE_ROAD);
+        }
     }
 }
 

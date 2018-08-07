@@ -11,10 +11,10 @@ var handlerSpawns = {
         
         //determine desired amounts of each body part
         var energyCap = spawn.room.energyCapacityAvailable;
-        var hundreds = Math.floor(energyCap/100);
-        var works = Math.floor(hundreds*1/3);
-        var carries = Math.floor(hundreds*1/3);
-        var moves = Math.floor(hundreds*1/3);
+        var fifties = Math.floor(energyCap/50);
+        var works = Math.floor(fifties*1/6);
+        var carries = Math.floor(fifties*1/3);
+        var moves = Math.floor(fifties*1/3);
         
         var bodyPartCap = 12;
         
@@ -44,11 +44,11 @@ var handlerSpawns = {
             make = true;
             
         }
-        else if(builders.length < 3) {
+        else if(builders.length < 2) {
             newRole = 'builder';
             make = true;
         }
-        else if(upgraders.length < 4) {
+        else if(upgraders.length < 5) {
             var newRole = 'upgrader';
             make = true;
         }
@@ -56,7 +56,7 @@ var handlerSpawns = {
             newRole = 'miner';
             make = true;
         }*/
-        else if(towerCaddies.length < 2) {
+        else if(towerCaddies.length < 1) {
             newRole = 'towerCaddy';
             make = true;
         }

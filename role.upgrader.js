@@ -20,7 +20,7 @@ var roleUpgrader = {
         //if we need energy
         else {
             //find nearest source and harvest it
-            var closeSource = creep.room.controller.pos.findClosestByRange(FIND_SOURCES);
+            var closeSource = creep.pos.findClosestByRange(FIND_SOURCES);
             if(creep.harvest(closeSource) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(closeSource);
             }

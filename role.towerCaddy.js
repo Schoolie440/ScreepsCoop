@@ -36,6 +36,18 @@ var roleTowerCaddy = {
                     if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(target);
                     }
+                } 
+                else {
+                    //Temporarily becomes a builder
+                    var target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+            
+                    //if c site found...
+                    if(target) {
+                        //build it
+                        if(creep.build(target) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(target);
+                        }
+                    }
                 }
             }
 	    }

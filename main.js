@@ -22,10 +22,9 @@ module.exports.loop = function () {
         towerControls.attack(towers[i]);
     }
     
-    
-    if(Game.time % 3600 < 5) {
-        constructExtensions.run(Game.rooms['W1N7']);
-        constructRoads.run(Game.rooms['W1N7']);
+    if(Game.time % 500 == 0) {
+        constructExtensions.run(Game.rooms['W12S56']);
+        constructRoads.run(Game.rooms['W12S56']);
     }
 
 
@@ -56,17 +55,20 @@ module.exports.loop = function () {
     }
     
     
-    //loops through all spawns and runs auto spawn module
-    for(var i in Game.spawns) {
-        //checks if enemies present in room
-        var enemies = Game.spawns[i].room.find(FIND_HOSTILE_CREEPS);
-        
-        //if enemies present, shut down regular creep production, start military
-        if(enemies.length) {
-            handlerArmySpawn.run(Game.spawns[i]);
-        }
-        else {
-            handlerSpawns.run(Game.spawns[i]);
+    
+    if(Game.time % 20 == 0) {
+        //loops through all spawns and runs auto spawn module
+        for(var i in Game.spawns) {
+            //checks if enemies present in room
+            var enemies = Game.spawns[i].room.find(FIND_HOSTILE_CREEPS);
+            
+            //if enemies present, shut down regular creep production, start military
+            if(enemies.length) {
+                handlerArmySpawn.run(Game.spawns[i]);
+            }
+            else {
+                handlerSpawns.run(Game.spawns[i]);
+            }
         }
     }
     

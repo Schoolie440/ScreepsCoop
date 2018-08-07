@@ -16,7 +16,7 @@ var roleBuilder = {
 
 	    if(creep.memory.working) {
 	        //find nearest C site
-	        var target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+	        var target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
             
             //if c site found...
             if(target) {
@@ -85,7 +85,7 @@ var roleBuilder = {
 	    //if not working...
 	    else {
 	        //find source, get energy
-	        var closeSource = creep.pos.findClosestByPath(FIND_SOURCES);
+	        var closeSource = creep.pos.findClosestByRange(FIND_SOURCES);
             if(creep.harvest(closeSource) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(closeSource);
             }

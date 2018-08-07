@@ -3,60 +3,46 @@ var utilityFunctions = {
     
     findNextExtPos: function(source) {
         
-        var p = {
-            x: 0,
-            y: 0
-        };
+        console.log(Memory.construction.extp.x);
+        console.log(Memory.construction.extp.y);
+        var spot = source.room.lookAt(Memory.construction.extp.x,Memory.construction.extp.y);
         
-        p.x = source.pos.x - 2;
-        p.y = source.pos.y + 2;
+        var good = utilityFunctions.checkSpot(spot);
         
-        var lap = 0;
-        var count = 0;
-        var dir = 0;
-
-        
-        do {
-            console.log(p.x);
-            console.log(p.y);
-            var spot = source.room.lookAt(p.x,p.y);
-            
-            var good = utilityFunctions.checkSpot(spot);
-            
-            if(!good) {
-                if(count < lap + 2) {
-                    switch(dir % 5) {
-                        case 0:
-                            p.y -= 2;
-                            break;
-                        case 1:
-                            p.x += 2;
-                            break;
-                        case 2:
-                            p.y += 2;
-                            break;
-                        case 3:
-                            p.x -= 2;
-                            break;
-                        case 4:
-                            p.x -= 1;
-                            p.y += 1;
-                            lap++;
-                            count = lap + 2;
-                            break;
-                    }
-                    
-                count++;
-                
-                } else {
-                    count = 0;
-                    dir++
+        if(!good) {
+            if(Memory.construction.count < Memory.construction.lap + 2) {
+                switch(Memory.construction.dir % 5) {
+                    case 0:
+                        Memory.construction.extp.y -= 2;
+                        break;
+                    case 1:
+                        Memory.construction.extp.x += 2;
+                        break;
+                    case 2:
+                        Memory.construction.extp.y += 2;
+                        break;
+                    case 3:
+                        Memory.construction.extp.x -= 2;
+                        break;
+                    case 4:
+                        Memory.construction.extp.x -= 1;
+                        Memory.construction.extp.y += 1;
+                        Memory.construction.lap++;
+                        Memory.construction.count = Memory.construction.lap + 2;
+                        break;
                 }
-            }
-        } while(!good);
-        
-        return p;
+                
+            Memory.construction.count++;
             
+            } else {
+                Memory.construction.count = 0;
+                Memory.construction.dir++;
+            }
+        } else {
+            return Memory.construction.extp;
+        }
+        
+        return {x: 0, y: 0};
     },
     
     checkSpot: function(spot) {

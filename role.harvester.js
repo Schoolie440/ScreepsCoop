@@ -15,7 +15,7 @@ var roleHarvester = {
 	    
 	    if(creep.memory.working) {
 	        //find nearest non-full depository
-	        var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+	        var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
                             structure.energy < structure.energyCapacity;
@@ -31,7 +31,7 @@ var roleHarvester = {
             //if all extensions/spawns are full...
             else {
                 //find non-full tower and deposit into that
-                var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_TOWER) &&
                             structure.energy < structure.energyCapacity;
@@ -42,6 +42,23 @@ var roleHarvester = {
                     //deposit
                     if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(target);
+                    }
+                }
+                else {
+                    //Temporarily becomes a builder
+                    var target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+            
+                    //if c site found...
+                    if(target) {
+                        //build it
+                        if(creep.build(target) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(target);
+                        }
+                    } else {
+                        //temporarily becomes an upgrader
+                        if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(creep.room.controller);
+                        }
                     }
                 }
             }
