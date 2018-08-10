@@ -1,11 +1,11 @@
 
 var utilityFunctions = {
-    
+
     findNextExtPos: function(source) {
             var spot = source.room.lookAt(Memory.construction.extp.x, Memory.construction.extp.y);
-            
+
             var good = utilityFunctions.checkSpot(spot);
-            
+
             if(!good) {
                 console.log(Memory.construction.extp.x, Memory.construction.extp.y)
                 if(Memory.construction.count < Memory.construction.lap + 2) {
@@ -30,24 +30,24 @@ var utilityFunctions = {
                             break;
                     }
                     console.log(Memory.construction.extp.x, Memory.construction.extp.y)
-                    
+
                     Memory.construction.count++;
-                
+
                 } else {
-                    
+
                     Memory.construction.count = 0;
                     Memory.construction.dir++;
                 }
             }
-        
+
         return Memory.construction.extp;
     },
 
-    
+
     checkSpot: function(spot) {
-        
+
         var good = true;
-        
+
         for(var i in spot) {
             console.log("Checking spot : ", Memory.construction.extp.x, Memory.construction.extp.y);
             console.log(spot[i].type);
@@ -84,6 +84,6 @@ var utilityFunctions = {
         console.log(good);
         return good;
     }
-}
+};
 
 module.exports = utilityFunctions;
