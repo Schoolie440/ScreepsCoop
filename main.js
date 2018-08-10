@@ -13,10 +13,6 @@ var handlerArmySpawn = require('handler.armySpawn');
 var constructExtensions = require('construct.extensions');
 
 
-
-//TESTING GITHUB/SCREEPS SYNCRONIZATION 3
-
-
 module.exports.loop = function () {
 
     //Finds all towers
