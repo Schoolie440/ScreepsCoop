@@ -3,7 +3,7 @@ var roleHarvester = {
     //standard harvester module
     /** @param {Creep} creep **/
     run: function(creep) {
-	    
+
 	    //set required state parameters
 	    if(creep.memory.working && creep.carry.energy == 0) {
             creep.memory.working = false;
@@ -11,8 +11,7 @@ var roleHarvester = {
 	    if(!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
 	        creep.memory.working = true;
 	    }
-	    
-	    
+
 	    if(creep.memory.working) {
 	        //find nearest non-full depository
 	        var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
@@ -47,7 +46,7 @@ var roleHarvester = {
                 else {
                     //Temporarily becomes a builder
                     var target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
-            
+
                     //if c site found...
                     if(target) {
                         //build it
@@ -71,7 +70,7 @@ var roleHarvester = {
                 creep.moveTo(source);
             }
 	    }
-    }    
+    }
 };
 
 module.exports = roleHarvester;
