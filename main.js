@@ -14,7 +14,7 @@ var constructExtensions = require('construct.extensions');
 
 
 
-//TESTING GITHUB/SCREEPS SYNCRONIZATION
+//TESTING GITHUB/SCREEPS SYNCRONIZATION 2
 
 
 module.exports.loop = function () {
