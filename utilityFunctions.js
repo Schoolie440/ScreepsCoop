@@ -32,10 +32,7 @@ var utilityFunctions = {
                     console.log(Memory.construction.extp.x, Memory.construction.extp.y)
 
                     Memory.construction.count++;
-<<<<<<< HEAD
-=======
-                    return {x: 0, y: 0};
->>>>>>> 1044cb172f08f5b90a315aa9359ca7925692484c
+
 
                 } else {
 
@@ -48,10 +45,7 @@ var utilityFunctions = {
               return Memory.construction.extp;
             }
 
-<<<<<<< HEAD
-        return Memory.construction.extp;
-=======
->>>>>>> 1044cb172f08f5b90a315aa9359ca7925692484c
+          return {x: 0, y: 0};
     },
 
 
@@ -96,5 +90,4 @@ var utilityFunctions = {
         return good;
     }
 };
-
 module.exports = utilityFunctions;
