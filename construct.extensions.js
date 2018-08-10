@@ -11,7 +11,7 @@ var constructExtensions = {
         
         var p = utilityFunctions.findNextExtPos(source);
         
-        if(p != {x: 0, y: 0}) {
+        if(p.x != 0 && p.y != 0) {
             console.log("construct at: " + p.x + " " + p.y)
             room.createConstructionSite(p.x, p.y, STRUCTURE_EXTENSION);
             room.createConstructionSite(p.x + 1, p.y, STRUCTURE_ROAD);

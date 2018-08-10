@@ -33,7 +33,7 @@ var towerControls = {
         }
     },
     
-    //repairs roads only, choosing proportionally weakes first
+    //repairs roads only, choosing proportionally weakest first
     repairRoads: function(tower) {
         if(tower) {
             const targets = tower.room.find(FIND_STRUCTURES, {

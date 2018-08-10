@@ -19,10 +19,12 @@ module.exports.loop = function () {
     
     //Operates towers (attack, repair, repairWalls, combo)
     for(i=0; i<towers.length; i++) {
-        towerControls.attack(towers[i]);
+        towerControls.combo(towers[i]);
     }
     
-    if(Game.time % 500 == 0) {
+    if(Game.time % 200 == 0) {
+        constructExtensions.run(Game.rooms['W12S56']);
+        constructExtensions.run(Game.rooms['W12S56']);
         constructExtensions.run(Game.rooms['W12S56']);
         constructRoads.run(Game.rooms['W12S56']);
     }

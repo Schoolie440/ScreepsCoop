@@ -12,9 +12,9 @@ var handlerSpawns = {
         //determine desired amounts of each body part
         var energyCap = spawn.room.energyCapacityAvailable;
         var fifties = Math.floor(energyCap/50);
-        var works = Math.floor(fifties*1/6);
-        var carries = Math.floor(fifties*1/3);
-        var moves = Math.floor(fifties*1/3);
+        var works = Math.floor(fifties*1/4);
+        var carries = Math.floor(fifties*1/4);
+        var moves = Math.floor(fifties*1/4);
         
         var bodyPartCap = 12;
         
