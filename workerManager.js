@@ -1,4 +1,4 @@
-
+var jobs = require('jobs');
 
 var workerManager = {
 
@@ -13,10 +13,12 @@ var workerManager = {
       /*loops through all rooms and clears the decisionmaking
       data from each so it can be recalculated
       */
-      for(var room in Game.rooms) {
+      for(var roomName in Game.rooms) {
+        var room = Game.rooms[roomName];
         room.memory.activeEnergy = 0;
         room.memory.activeBuilders = 0;
         room.memory.activeTargets = [];
+        room.memory.availableCreeps = [];
       }
 
       var creep = Game.creeps[name];
@@ -44,10 +46,11 @@ var workerManager = {
       }
     }
 
-    for(var room in Game.rooms) {
-      var energyNeeded = room.energyCapacity-room.energyAvailable-room.memory.activeEnergy;
-      while(energyNeeded > 0 && room.availableCreeps.length > 0){
-        var newCreep = Game.getObjectById(room.memory.availableCreeps[0];
+    for(var roomName in Game.rooms) {
+      var room = Game.rooms[roomName];
+      var energyNeeded = room.energyCapacityAvailable-room.energyAvailable-room.memory.activeEnergy;
+      while(energyNeeded > 0 && room.memory.availableCreeps.length > 0){
+        var newCreep = Game.getObjectById(room.memory.availableCreeps[0]);
         newCreep.memory.job = 'store';
         jobs.storeEnergy(newCreep);
         energyNeeded -= newCreep.carryCapacity;
@@ -59,7 +62,7 @@ var workerManager = {
         targets.sort((a,b) => b.hits/b.hitsMax - a.hits/a.hitsMax);
 
         while(targets.length && room.memory.availableCreeps.length > 0 && room.memory.activeBuilders <= 2) {
-          var newCreep = Game.getObjectById(room.memory.availableCreeps[0];
+          var newCreep = Game.getObjectById(room.memory.availableCreeps[0]);
           newCreep.memory.job = 'build';
           newCreep.memory.target = targets[0].id;
           jobs.buildStructures(newCreep);
@@ -76,7 +79,7 @@ var workerManager = {
         targets.sort((a,b) => a.hits/a.hitsMax - b.hits/b.hitsMax);
 
         while(targets.length > 0 && room.memory.availableCreeps.length > 0) {
-          var newCreep = Game.getObjectById(room.memory.availableCreeps[0];
+          var newCreep = Game.getObjectById(room.memory.availableCreeps[0]);
           if(!room.memory.activeTargets.includes(targets[0].id)) {
             newCreep.memory.job = 'repair';
             newCreep.memory.target = targets[0].id;
@@ -84,13 +87,13 @@ var workerManager = {
             room.memory.availableCreeps.shift();
           }
           targets.shift();
-          
+
         }
       }
 
       if(room.memory.availableCreeps.length > 0) {
         for(var creepID in room.memory.availableCreeps) {
-          var newCreep = Game.getObjectById(creepID);
+          var newCreep = Game.getObjectById(room.memory.availableCreeps[creepID]);
           newCreep.memory.job = 'upgrade'
           jobs.upgradeController(newCreep);
         }

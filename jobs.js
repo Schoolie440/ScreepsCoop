@@ -1,5 +1,4 @@
 
-
 var jobs = {
 
   storeEnergy: function(creep) {
@@ -38,8 +37,7 @@ var jobs = {
             creep.moveTo(source);
         }
       }
-    }
-  },
+    },
 
   buildStructures: function(creep) {
 
@@ -128,7 +126,6 @@ var jobs = {
         }
     }
   }
-
 }
 
 module.exports = jobs;
