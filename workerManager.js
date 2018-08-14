@@ -77,11 +77,14 @@ var workerManager = {
 
         while(targets.length > 0 && room.memory.availableCreeps.length > 0) {
           var newCreep = Game.getObjectById(room.memory.availableCreeps[0];
-          newCreep.memory.job = 'repair';
-          newCreep.memory.target = targets[0].id;
-          jobs.repairStructures(newCreep);
+          if(!room.memory.activeTargets.includes(targets[0].id)) {
+            newCreep.memory.job = 'repair';
+            newCreep.memory.target = targets[0].id;
+            jobs.repairStructures(newCreep);
+            room.memory.availableCreeps.shift();
+          }
           targets.shift();
-          room.memory.availableCreeps.shift();
+          
         }
       }
 
@@ -92,7 +95,6 @@ var workerManager = {
           jobs.upgradeController(newCreep);
         }
       }
-
     }
   }
 }
