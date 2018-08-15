@@ -59,7 +59,6 @@ var workerManager = {
 
 
       if(room.memory.availableCreeps.length > 0 && room.memory.activeBuilders <= 2) {
-        console.log('Find C sites ', room.memory.availableCreeps.length, room.memory.activeBuilders);
         var targets = room.find(FIND_CONSTRUCTION_SITES);
         targets.sort((a,b) => b.hits/b.hitsMax - a.hits/a.hitsMax);
 
