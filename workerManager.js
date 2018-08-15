@@ -60,7 +60,7 @@ var workerManager = {
 
       if(room.memory.availableCreeps.length > 0 && room.memory.activeBuilders <= 2) {
         var targets = room.find(FIND_CONSTRUCTION_SITES);
-        targets.sort((a,b) => b.hits/b.hitsMax - a.hits/a.hitsMax);
+        targets.sort((b,a) => a.hits/a.hitsMax - b.hits/b.hitsMax);
 
         while(targets.length && room.memory.availableCreeps.length > 0 && room.memory.activeBuilders <= 2) {
           var newCreep = Game.getObjectById(room.memory.availableCreeps[0]);

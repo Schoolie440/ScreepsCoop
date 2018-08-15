@@ -19,7 +19,9 @@ var jobs = {
                           structure.energy < structure.energyCapacity;
                   }
         });
-        creep.memory.target = target.id;
+        if(target) {
+          creep.memory.target = target.id;
+        }
       }
         //if there is a non-full extension/spawn/tower:
         if(creep.memory.target != null) {
@@ -27,6 +29,9 @@ var jobs = {
             if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(Game.getObjectById(creep.memory.target));
             }
+        } else {
+          creep.memory.job = null;
+          creep.memory.working = false;
         }
       }
       //if not working...
