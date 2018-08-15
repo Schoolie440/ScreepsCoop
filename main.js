@@ -12,8 +12,10 @@ var workerManager = require('workerManager');
 module.exports.loop = function () {
 
 
-    //Runs all worker creep operation scripts
-    workerManager.run();
+    //Runs all worker creep operation scripts if creeps exist
+    if(Object.keys(Game.creeps).length > 0) {
+      workerManager.run();
+    }
 
     //Finds all towers
     var towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
@@ -23,7 +25,7 @@ module.exports.loop = function () {
         towerControls.combo(towers[i]);
     }
 
-    if(Game.time % 200 == 0) {
+    if(false) {
         constructExtensions.run(Game.rooms['W12S56']);
         constructExtensions.run(Game.rooms['W12S56']);
         constructExtensions.run(Game.rooms['W12S56']);

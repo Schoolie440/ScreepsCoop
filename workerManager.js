@@ -4,39 +4,39 @@ var workerManager = {
 
   run: function() {
 
+    /*loops through all rooms and clears the decisionmaking
+    data from each so it can be recalculated
+    */
+    for(var roomName in Game.rooms) {
+      var room = Game.rooms[roomName];
+      room.memory.activeEnergy = 0;
+      room.memory.activeBuilders = 0;
+      room.memory.activeTargets = [];
+      room.memory.availableCreeps = [];
+    }
+
+
     /*Checks through all creeps. If the creep has a job,
     runs its job method. If not, stores creep id in memory
     as an available creep for job assignment
     */
     for(var name in Game.creeps) {
-
-      /*loops through all rooms and clears the decisionmaking
-      data from each so it can be recalculated
-      */
-      for(var roomName in Game.rooms) {
-        var room = Game.rooms[roomName];
-        room.memory.activeEnergy = 0;
-        room.memory.activeBuilders = 0;
-        room.memory.activeTargets = [];
-        room.memory.availableCreeps = [];
-      }
-
       var creep = Game.creeps[name];
       if(creep.memory.job == 'store') {
-        jobs.storeEnergy(creep);
         if(creep.memory.working) {
           creep.room.memory.activeEnergy += creep.carry.RESOURCE_ENERGY;
         } else {
           creep.room.memory.activeEnergy += creep.carryCapacity;
         }
+        jobs.storeEnergy(creep);
       }
       else if(creep.memory.job == 'build') {
-        jobs.buildStructures(creep);
         creep.memory.activeBuilders++;
+        jobs.buildStructures(creep);
       }
       else if(creep.memory.job == 'repair') {
-        jobs.repairStructures(creep);
         room.memory.activeTargets.push(creep.memory.target);
+        jobs.repairStructures(creep);
       }
       else if(creep.memory.job == 'upgrade') {
         jobs.upgradeController(creep);
@@ -57,7 +57,9 @@ var workerManager = {
         room.memory.availableCreeps.shift();
       }
 
+
       if(room.memory.availableCreeps.length > 0 && room.memory.activeBuilders <= 2) {
+        console.log('Find C sites ', room.memory.availableCreeps.length, room.memory.activeBuilders);
         var targets = room.find(FIND_CONSTRUCTION_SITES);
         targets.sort((a,b) => b.hits/b.hitsMax - a.hits/a.hitsMax);
 
