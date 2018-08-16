@@ -75,7 +75,7 @@ var workerManager = {
       if(room.memory.availableCreeps.length > 0) {
         targets = room.find(FIND_STRUCTURES, {filter: (struct) => {
                 return (struct.structureType == STRUCTURE_ROAD || struct.structureType == STRUCTURE_CONTAINER) &&
-                    (struct.hits < (struct.hitsMax * .9))}});
+                    (struct.hits < (struct.hitsMax * .75))}});
         //sort weakest to strongest
         targets.sort((a,b) => a.hits/a.hitsMax - b.hits/b.hitsMax);
 
