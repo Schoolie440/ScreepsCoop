@@ -110,6 +110,7 @@ var jobs = {
   upgradeController: function(creep) {
     if(creep.memory.working && creep.carry.energy == 0) {
         creep.memory.working = false;
+        creep.memory.job = null;
     }
     if(!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
       creep.memory.working = true;
