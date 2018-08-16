@@ -127,7 +127,7 @@ var jobs = {
     else {
         //find nearest source and harvest it
         var sources = creep.room.find(FIND_SOURCES);
-        sources.sort((a,b){b.energy - a.energy});
+        sources.sort((a,b) => b.energy - a.energy);
         if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
             creep.moveTo(sources[0]);
         }
