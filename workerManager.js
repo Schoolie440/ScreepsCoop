@@ -60,13 +60,13 @@ var workerManager = {
         room.memory.availableCreeps.shift();
       }
 
-      if(room.memory.availableCreeps.length > 0) {
-        var towers = room.find(FIND_STRUCTURES, {filter: (struct) => {
-              return (struct.structureType == STRUCTURE_TOWER &&
-                struct.energy < struct.energyCapacity)
-        }});
-        towers.sort((a,b) => a.hits/a.hitsMax - b.hits/b.hitsMax);
+      var towers = room.find(FIND_STRUCTURES, {filter: (struct) => {
+            return (struct.structureType == STRUCTURE_TOWER &&
+              struct.energy < struct.energyCapacity)
+      }});
+      towers.sort((a,b) => a.hits/a.hitsMax - b.hits/b.hitsMax);
 
+      if(room.memory.availableCreeps.length > 0 && towers.length > 0) {
         var newCreep = Game.getObjectById(room.memory.availableCreeps[0]);
         newCreep.memory.job = 'caddy';
         jobs.towerCaddy(newCreep);
