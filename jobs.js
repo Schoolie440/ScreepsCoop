@@ -31,10 +31,7 @@ var jobs = {
           }
           else if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_FULL) {
               creep.memory.target = null;
-          } else {
-            creep.memory.job = null;
-            creep.memory.working = false;
-          }
+          } 
         }
         //if not working...
         else {
