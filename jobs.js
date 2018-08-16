@@ -24,7 +24,7 @@ var jobs = {
         }
         else {
           creep.memory.job = null;
-          creep.memory.working = false;
+          creep.memory.working = false
         }
       }
         //if there is a non-full extension/spawn/tower:
@@ -48,6 +48,54 @@ var jobs = {
         }
       }
     },
+
+    towerCaddy: function(creep) {
+      if(creep.memory.working && creep.carry.energy == 0) {
+            creep.memory.working = false;
+            creep.memory.job = null;
+      }
+      if(!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
+          creep.memory.working = true;
+      }
+
+      if(creep.memory.working) {
+        if(creep.memory.target == null) {
+          //find nearest non-full depository
+          var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_TOWER &&
+                            structure.energy < structure.energyCapacity);
+                    }
+          });
+          if(target) {
+            creep.memory.target = target.id;
+          }
+          else {
+            creep.memory.job = null;
+            creep.memory.working = false
+          }
+        }
+          //if there is a non-full extension/spawn/tower:
+          if(creep.memory.target != null) {
+            //transfer energy into it
+            if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(Game.getObjectById(creep.memory.target));
+            }
+            else if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_FULL) {
+                creep.memory.target = null;
+            }
+          }
+        }
+        //if not working...
+        else {
+          //find closest source and harvest
+          var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
+                  return (source.energy > 0)}});
+          if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+              creep.moveTo(source);
+          }
+        }
+      },
 
   buildStructures: function(creep) {
 

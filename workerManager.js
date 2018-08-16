@@ -30,6 +30,9 @@ var workerManager = {
         }
         jobs.storeEnergy(creep);
       }
+      else if(creep.memory.job == 'caddy') {
+        jobs.towerCaddy(creep);
+      }
       else if(creep.memory.job == 'build') {
         creep.room.memory.activeBuilders++;
         jobs.buildStructures(creep);
@@ -54,6 +57,19 @@ var workerManager = {
         newCreep.memory.job = 'store';
         jobs.storeEnergy(newCreep);
         energyNeeded -= newCreep.carryCapacity;
+        room.memory.availableCreeps.shift();
+      }
+
+      if(room.memory.availableCreeps.length > 0) {
+        var towers = room.find(FIND_STRUCTURES, {filter: (struct) => {
+              return (struct.structureType == STRUCTURE_TOWER &&
+                struct.energy < struct.energyCapacity)
+        }});
+        targets.sort((a,b) => a.hits/a.hitsMax - b.hits/b.hitsMax);
+
+        var newCreep = Game.getObjectById(room.memory.availableCreeps[0]);
+        newCreep.memory.job = 'caddy';
+        jobs.towerCaddy(newCreep);
         room.memory.availableCreeps.shift();
       }
 
