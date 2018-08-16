@@ -31,11 +31,11 @@ var workerManager = {
         jobs.storeEnergy(creep);
       }
       else if(creep.memory.job == 'build') {
-        creep.memory.activeBuilders++;
+        creep.room.memory.activeBuilders++;
         jobs.buildStructures(creep);
       }
       else if(creep.memory.job == 'repair') {
-        room.memory.activeTargets.push(creep.memory.target);
+        creep.room.memory.activeTargets.push(creep.memory.target);
         jobs.repairStructures(creep);
       }
       else if(creep.memory.job == 'upgrade') {
