@@ -31,15 +31,15 @@ var jobs = {
           }
           else if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_FULL) {
               creep.memory.target = null;
-          } 
-        }
-        //if not working...
-        else {
-          //find closest source and harvest
-          var source = creep.pos.findClosestByRange(FIND_SOURCES);
-          if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-              creep.moveTo(source);
           }
+        }
+      }
+      //if not working...
+      else {
+        //find closest source and harvest
+        var source = creep.pos.findClosestByRange(FIND_SOURCES);
+        if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(source);
         }
       }
     },
