@@ -25,23 +25,24 @@ var jobs = {
       }
         //if there is a non-full extension/spawn/tower:
         if(creep.memory.target != null) {
-            //transfer energy into it
-            if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(Game.getObjectById(creep.memory.target));
-            }
-            else if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_FULL) {
-                creep.memory.target = null;
-        } else {
-          creep.memory.job = null;
-          creep.memory.working = false;
+          //transfer energy into it
+          if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+              creep.moveTo(Game.getObjectById(creep.memory.target));
+          }
+          else if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_FULL) {
+              creep.memory.target = null;
+          } else {
+            creep.memory.job = null;
+            creep.memory.working = false;
+          }
         }
-      }
-      //if not working...
-      else {
-        //find closest source and harvest
-        var source = creep.pos.findClosestByRange(FIND_SOURCES);
-        if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(source);
+        //if not working...
+        else {
+          //find closest source and harvest
+          var source = creep.pos.findClosestByRange(FIND_SOURCES);
+          if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+              creep.moveTo(source);
+          }
         }
       }
     },
