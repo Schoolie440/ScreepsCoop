@@ -22,6 +22,10 @@ var jobs = {
         if(target) {
           creep.memory.target = target.id;
         }
+        else {
+          creep.memory.job = null;
+          creep.memory.working = false;
+        }
       }
         //if there is a non-full extension/spawn/tower:
         if(creep.memory.target != null) {
