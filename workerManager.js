@@ -24,7 +24,7 @@ var workerManager = {
       var creep = Game.creeps[name];
       if(creep.memory.job == 'store') {
         if(creep.memory.working) {
-          creep.room.memory.activeEnergy += creep.carry.RESOURCE_ENERGY;
+          creep.room.memory.activeEnergy += creep.carry[RESOURCE_ENERGY];
         } else {
           creep.room.memory.activeEnergy += creep.carryCapacity;
         }
