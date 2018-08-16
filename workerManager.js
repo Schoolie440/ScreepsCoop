@@ -64,7 +64,6 @@ var workerManager = {
             return (struct.structureType == STRUCTURE_TOWER &&
               struct.energy < struct.energyCapacity)
       }});
-      towers.sort((a,b) => a.hits/a.hitsMax - b.hits/b.hitsMax);
 
       if(room.memory.availableCreeps.length > 0 && towers.length > 0) {
         var newCreep = Game.getObjectById(room.memory.availableCreeps[0]);
