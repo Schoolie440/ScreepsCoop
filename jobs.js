@@ -29,6 +29,8 @@ var jobs = {
             if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(Game.getObjectById(creep.memory.target));
             }
+            else if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_FULL) {
+                creep.memory.target = null;
         } else {
           creep.memory.job = null;
           creep.memory.working = false;
