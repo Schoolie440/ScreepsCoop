@@ -33,13 +33,9 @@ var handlerSpawns = {
 
         var make = false;
 
-        //create creep using determined parts/roles
-      if(workerCreeps.length < 10) {
-        make = true;
-      }
 
         //spawn creep, if conditions are correct
-        if(make) {
+        if(workerCreeps.length < 10) {
             spawn.createCreep(bodyParts,null,{job: null, target: null, working: false});
         }
         //emergency recovery creeps in case of genocide, prevents minimal energy amounts/
