@@ -65,7 +65,7 @@ var workerManager = {
               return (struct.structureType == STRUCTURE_TOWER &&
                 struct.energy < struct.energyCapacity)
         }});
-        targets.sort((a,b) => a.hits/a.hitsMax - b.hits/b.hitsMax);
+        towers.sort((a,b) => a.hits/a.hitsMax - b.hits/b.hitsMax);
 
         var newCreep = Game.getObjectById(room.memory.availableCreeps[0]);
         newCreep.memory.job = 'caddy';
