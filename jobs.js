@@ -142,13 +142,13 @@ var jobs = {
     }
 
     if(creep.memory.working) {
-      var target = Game.getObjectById(creep.memory.target);
+      var repairTarget = Game.getObjectById(creep.memory.target);
 
-      if(creep.repair(target) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(target);
+      if(creep.repair(repairTarget) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(repairTarget);
       }
 
-      if(target.hits == target.hitsMax) {
+      if(repairTarget.hits == repairTarget.hitsMax) {
           creep.memory.working = false;
           creep.memory.target = null;
           creep.memory.job = null;
