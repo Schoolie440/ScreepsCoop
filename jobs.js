@@ -149,10 +149,10 @@ var jobs = {
       }
 
       if(repairTarget.hits == repairTarget.hitsMax) {
-          creep.memory.working = false;
           creep.memory.target = null;
           creep.memory.job = null;
       }
+
     } else {
       var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
               return (source.energy > 0)}});
