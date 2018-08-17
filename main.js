@@ -24,12 +24,13 @@ module.exports.loop = function () {
         towerControls.attack(towers[i]);
     }
 
-    if(true) {
-        myRoom = Game.spawns['Spawn1'].room;
+    if(true) {  // construcion site generation
+        myRoom = Game.spawns['Spawn1'].room; //TODO: Generalize for multiple rooms / spawns
+
         constructExtensions.run(myRoom);
         // constructExtensions.run(Game.rooms['W12S56']);
         // constructExtensions.run(Game.rooms['W12S56']);
-        // constructRoads.run(Game.rooms['W12S56']);
+        constructRoads.run(myRoom);
     }
 
     if(Game.time % 20 == 0) {
