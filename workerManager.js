@@ -5,7 +5,7 @@ var workerManager = {
   run: function() {
     
     /* If there are no creeps, return */
-    if(Object.keys(Game.creeps).length > 0) {
+    if(Object.keys(Game.creeps).length < 0) {
         return;
     }
 
