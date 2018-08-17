@@ -11,7 +11,6 @@ var workerManager = require('workerManager');
 
 module.exports.loop = function () {
 
-
     //Runs all worker creep operation scripts if creeps exist
     if(Object.keys(Game.creeps).length > 0) {
       workerManager.run();
@@ -25,11 +24,12 @@ module.exports.loop = function () {
         towerControls.attack(towers[i]);
     }
 
-    if(false) {
-        constructExtensions.run(Game.rooms['W12S56']);
-        constructExtensions.run(Game.rooms['W12S56']);
-        constructExtensions.run(Game.rooms['W12S56']);
-        constructRoads.run(Game.rooms['W12S56']);
+    if(true) {
+        myRoom = Game.spawns['Spawn1'].room;
+        constructExtensions.run(myRoom);
+        // constructExtensions.run(Game.rooms['W12S56']);
+        // constructExtensions.run(Game.rooms['W12S56']);
+        // constructRoads.run(Game.rooms['W12S56']);
     }
 
     if(Game.time % 20 == 0) {
