@@ -3,7 +3,7 @@ var jobs = require('jobs');
 var workerManager = {
 
   run: function() {
-    
+
     /* If there are no creeps, return */
     if(Object.keys(Game.creeps).length < 0) {
         return;
@@ -128,7 +128,7 @@ var workerManager = {
         //find repair targets
         targets = room.find(FIND_STRUCTURES, {filter: (struct) => {
                 return (struct.structureType == STRUCTURE_ROAD || struct.structureType == STRUCTURE_CONTAINER) &&
-                    (struct.hits < (struct.hitsMax * .75))}});
+                    (struct.hits < (struct.hitsMax - room.memory.availableCreeps[0].carryCapacity * 100))}});
         //sort weakest to strongest
         targets.sort((a,b) => a.hits/a.hitsMax - b.hits/b.hitsMax);
 

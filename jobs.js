@@ -151,6 +151,7 @@ var jobs = {
       if(repairTarget.hits == repairTarget.hitsMax) {
           creep.memory.target = null;
           creep.memory.job = null;
+          creep.memory.working = false;
       }
 
     } else {
