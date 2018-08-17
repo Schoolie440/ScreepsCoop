@@ -6,9 +6,9 @@ var constructExtensions = {
     run: function(room) {
 
         var controllerLevel = room.controller.level;
-        
-        if (room.memory.lastControllerLevel != controllerLevel) {
-            var maxExtensions = CONTROLLER_STRUCTURES['extension'][controllerLevel];  // get max count from constant definitions
+        var maxExtensions = CONTROLLER_STRUCTURES['extension'][controllerLevel];  // get max count from constant definitions
+
+        if (room.memory.lastMaxExtensions != maxExtensions) {
 
             var extensions = room.find(FIND_MY_STRUCTURES, {
                 filter: { structureType: STRUCTURE_EXTENSION }
@@ -25,7 +25,7 @@ var constructExtensions = {
 
             console.log(controllerPos);
 
-            room.memory.lastControllerLevel = controllerLevel;
+            room.memory.lastMaxExtensions = maxExtensions;
         }
     }
 }
