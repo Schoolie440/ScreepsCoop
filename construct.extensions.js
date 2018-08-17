@@ -64,6 +64,8 @@ var constructExtensions = {
 
             var depositPath = Math.ceil(extensionsToBuild / 4);
 
+            // TODO: need to decide which "quadrant" direction to build extension array, currently just goes down to the left
+
             // visualize path between source and extension array
             for (n=1; n<=entryRoad; n++) {
               room.visual.circle(baseX - n, baseY + n, {stroke: 'red'});
