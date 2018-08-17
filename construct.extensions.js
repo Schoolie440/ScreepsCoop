@@ -23,24 +23,35 @@ var constructExtensions = {
             }
 
             // find sources, spawns, and controller
-            controller = room.controller;
-            spawns = room.spawns;
+            var controller = room.controller;
             var sources = room.find(FIND_SOURCES_ACTIVE);
             var spawns = room.find(FIND_MY_SPAWNS);
-            spawns.push(controller);
+            spawns.push(controller); // add controller to list of places to take energy
 
+
+            var longestShortestTrip = 0;
             //loop over all spawns / controllers, calculate distances to all spawns
-            for (i=0; i < spawns.length; i++) {
-              var store = spawns[i];
+            for (n=0; n < sources.length; n++) {
+              var source = sources[n];
 
-              for (n=0; n < sources.length; n++) {
-                var spawn = sources[n];
-                console.log(store, spawn);
+              var shortestTrip = 999;
+              for (i=0; i < spawns.length; i++) {
+                var store = spawns[i];
+                var distance = store.pos.findPathTo(source).length;
+
+                shortestTrip = Math.min(distance, shortestTrip); // shortest trip between this source and a storage location
               }
+
+              longestShortestTrip = Math.max(shortestTrip, longestShortestTrip);
+              if (longestShortestTrip == shortestTrip) {  // find the source with the longest shortest trip, this is where we'll put the first extensions
+                var mostIsolatedSource = source;
+              }
+
             }
 
-            console.log('spawns', spawns);
-            console.log('sources', sources);
+            room.visual.circle(mostIsolatedSource.pos,
+              {fill: 'transparent', radius: 1, stroke: 'red'}); // draw circle to verify we found the right spawns
+
 
 
             room.memory.lastMaxExtensions = maxExtensions; // store for change detection
