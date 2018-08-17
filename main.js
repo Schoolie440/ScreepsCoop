@@ -22,7 +22,7 @@ module.exports.loop = function () {
 
     //Operates towers (attack, repair, repairWalls, combo)
     for(i=0; i<towers.length; i++) {
-        towerControls.combo(towers[i]);
+        towerControls.attack(towers[i]);
     }
 
     if(false) {
