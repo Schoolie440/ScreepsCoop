@@ -3,6 +3,11 @@ var jobs = require('jobs');
 var workerManager = {
 
   run: function() {
+    
+    /* If there are no creeps, return */
+    if(Object.keys(Game.creeps).length < 0) {
+        return;
+    }
 
     /*loops through all rooms and clears the decisionmaking
     data from each so it can be recalculated
