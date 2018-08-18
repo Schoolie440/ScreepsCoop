@@ -75,7 +75,7 @@ var workerManager = {
       if(room.memory.availableCreeps.length > 0) {
         var repairTargets = room.find(FIND_STRUCTURES, {filter: (structure) => {
                 return (structure.structureType == STRUCTURE_ROAD || structure.structureType == STRUCTURE_CONTAINER) &&
-                    structure.hits < (structure.hitsMax - room.memory.availableCreeps[0].carryCapacity)}});
+                    structure.hits < (structure.hitsMax - Game.getObjectById(room.memory.availableCreeps[0]).carryCapacity)}});
         //sort weakest to strongest
         repairTargets.sort((a,b) => a.hits/a.hitsMax - b.hits/b.hitsMax);
 
