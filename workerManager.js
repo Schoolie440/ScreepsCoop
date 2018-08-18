@@ -87,7 +87,7 @@ var workerManager = {
             jobs.repairStructures(newCreep);
             room.memory.availableCreeps.shift();
           }
-          targets.shift();
+          repairTargets.shift();
 
         }
       }
