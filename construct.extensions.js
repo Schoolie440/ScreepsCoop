@@ -7,7 +7,7 @@ var constructExtensions = {
 
         var controllerLevel = room.controller.level;
         var maxExtensions = CONTROLLER_STRUCTURES['extension'][controllerLevel];  // get max count from constant definitions
-
+        
         if (room.memory.lastMaxExtensions != maxExtensions || room.memory.forceExtensions) { // forceExtensions is a manual override for development
 
             var extensions = room.find(FIND_MY_STRUCTURES, {
@@ -62,30 +62,89 @@ var constructExtensions = {
 
             var entryRoad = 3; // length of road between source and extension array
 
-            var depositPath = Math.ceil(extensionsToBuild / 4);
+            var depositPath = Math.ceil(extensionsToBuild / 4); // length of deposit path assuming 4 extensions per step
 
-            // TODO: need to decide which "quadrant" direction to build extension array, currently just goes down to the left
+
+            // offsets for each 45 degree vector
+            var offsets = [
+              [ 1,  1],
+              [ 1, -1],
+              [-1,  1],
+              [-1, -1]
+            ];
+
+            var clearRanges = [0, 0, 0, 0]; // placeholder for clear distances in each direction
+
+            for (o=0; o<offsets.length; o++) { // loop over each 45 degree direction
+              var offset = offsets[o];
+              var oX = offset[0];
+              var oY = offset[1];
+
+              var r = 2; // start angle for check
+              var clear = true; // loop logical check, goes false when a wall is found
+
+              while (clear) { // haven't hit a wall yet
+                var x = baseX + oX * r;
+                var y = baseY + oY * r;
+
+                // room.visual.circle(x, y, {stroke: 'orange'});
+                var terrainCheck = Game.map.getTerrainAt(x, y, room.name);
+                if (terrainCheck == 'wall') {
+                  clear = false; // found a wall, break loop
+                  clearRanges[o] = r; // store range in array
+                }
+                r++; // go one step further
+              }
+            }
+
+            var offsetIndex = clearRanges.indexOf(Math.max.apply(null, clearRanges)); // get index of farthest clear distance
+            var clearestOffset = offsets[offsetIndex]; // offset vector for clearest direction
 
             // visualize path between source and extension array
             for (n=1; n<=entryRoad; n++) {
-              room.visual.circle(baseX - n, baseY + n, {stroke: 'red'});
+              var pos = new RoomPosition(baseX + clearestOffset[0] * n, baseY + clearestOffset[1] * n, room.name);
+
+              room.visual.circle(pos, {stroke: 'yellow'});
+              pos.createConstructionSite(STRUCTURE_ROAD);
             }
 
-            // visualize extension array
-            for (n=entryRoad+1; n<=entryRoad + depositPath; n++) {
-              var x = baseX - n;
-              var y = baseY + n;
+            var extensionsCreated = 0;
+
+            // build extension array
+            var extensionsCreated = 0;
+
+            for (n=entryRoad+1; n<=entryRoad + depositPath; n++) { //start at end of entry road, step over each point in deposit path
+
+              var x = baseX + clearestOffset[0] * n;
+              var y = baseY + clearestOffset[1] * n;
+
               room.visual.circle(x, y, {stroke: 'blue'}); // deposit road
+              room.createConstructionSite(x, y, STRUCTURE_ROAD); // build deposit road
 
-              //show extensions
-              room.visual.circle(x-1, y, {stroke: 'yellow'});
-              room.visual.circle(x, y+1, {stroke: 'cyan'});
-              room.visual.circle(x-1, y-1, {stroke: 'green'});
-              room.visual.circle(x+1, y+1, {stroke: 'magenta'});
+              // array of offsets from each deposit path point to extension locations
+              extensionOffsets = [
+                [1, 0],
+                [0, 1],
+                [1, -1],
+                [-1, 1],
+              ]
 
+              var eo = 0;
+              while (extensionsCreated < maxExtensions && eo < extensionOffsets.length) { // build extensions for each deposit path point, until all extensions are built
+
+                var eoX = clearestOffset[0] * extensionOffsets[eo][0];
+                var eoY = clearestOffset[1] * extensionOffsets[eo][1];
+
+                room.visual.circle(x + eoX, y + eoY, {stroke: 'yellow'});
+                // room.createConstructionSite(eoX, eoY, STRUCTURE_EXTENSION); // build extension
+                extensionsCreated++;
+                eo++;
+
+              }
             }
 
             room.memory.lastMaxExtensions = maxExtensions; // store for change detection
+            room.memory.forceExtensions = false // reset manual trigger (comment to persist)
         }
     }
 }
