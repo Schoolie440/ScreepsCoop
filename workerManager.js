@@ -20,6 +20,9 @@ var workerManager = {
     runs its job method. If not, stores creep id in memory
     as an available creep for job assignment
     */
+
+    var job_tracker = {store: 0, build: 0, repair:0, upgrade:0, open:0};
+
     for(var name in Game.creeps) {
       var creep = Game.creeps[name];
       if(creep.memory.job == 'store') {
@@ -29,22 +32,29 @@ var workerManager = {
           creep.room.memory.activeEnergy += creep.carryCapacity;
         }
         jobs.storeEnergy(creep);
+        job_tracker.store++;
       }
       else if(creep.memory.job == 'build') {
         creep.room.memory.activeBuilders++;
         jobs.buildStructures(creep);
+        job_tracker.build++;
       }
       else if(creep.memory.job == 'repair') {
         creep.room.memory.activeTargets.push(creep.memory.target);
         jobs.repairStructures(creep);
+        job_tracker.repair++;
       }
       else if(creep.memory.job == 'upgrade') {
         jobs.upgradeController(creep);
+        job_tracker.upgrade++;
       }
       else if(creep.memory.job == null) {
         creep.room.memory.availableCreeps.push(creep.id);
+        job_tracker.open++;
       }
     }
+
+    console.log('Creep Counts: ', JSON.stringify(job_tracker));
 
     for(var roomName in Game.rooms) {
       var room = Game.rooms[roomName];
