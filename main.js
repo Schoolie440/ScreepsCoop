@@ -12,9 +12,7 @@ var workerManager = require('workerManager');
 module.exports.loop = function () {
 
     //Runs all worker creep operation scripts if creeps exist
-    if(Object.keys(Game.creeps).length > 0) {
-      workerManager.run();
-    }
+    workerManager.run();
 
     //Finds all towers
     var towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
