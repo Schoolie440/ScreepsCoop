@@ -7,7 +7,9 @@ var constructExtensions = {
 
         var controllerLevel = room.controller.level;
         var maxExtensions = CONTROLLER_STRUCTURES['extension'][controllerLevel];  // get max count from constant definitions
-        
+
+        // room.memory.forceExtensions = true;
+
         if (room.memory.lastMaxExtensions != maxExtensions || room.memory.forceExtensions) { // forceExtensions is a manual override for development
 
             var extensions = room.find(FIND_MY_STRUCTURES, {
@@ -62,7 +64,7 @@ var constructExtensions = {
 
             var entryRoad = 3; // length of road between source and extension array
 
-            var depositPath = Math.ceil(extensionsToBuild / 4); // length of deposit path assuming 4 extensions per step
+            var depositPath = Math.ceil(maxExtensions / 4); // length of deposit path assuming 4 extensions per step
 
 
             // offsets for each 45 degree vector
@@ -104,7 +106,7 @@ var constructExtensions = {
             for (n=1; n<=entryRoad; n++) {
               var pos = new RoomPosition(baseX + clearestOffset[0] * n, baseY + clearestOffset[1] * n, room.name);
 
-              room.visual.circle(pos, {stroke: 'yellow'});
+              room.visual.circle(pos, {stroke: 'orange'});
               pos.createConstructionSite(STRUCTURE_ROAD);
             }
 
@@ -118,7 +120,7 @@ var constructExtensions = {
               var x = baseX + clearestOffset[0] * n;
               var y = baseY + clearestOffset[1] * n;
 
-              room.visual.circle(x, y, {stroke: 'blue'}); // deposit road
+              room.visual.circle(x, y, {stroke: 'green'}); // deposit road
               room.createConstructionSite(x, y, STRUCTURE_ROAD); // build deposit road
 
               // array of offsets from each deposit path point to extension locations
@@ -135,8 +137,8 @@ var constructExtensions = {
                 var eoX = clearestOffset[0] * extensionOffsets[eo][0];
                 var eoY = clearestOffset[1] * extensionOffsets[eo][1];
 
-                room.visual.circle(x + eoX, y + eoY, {stroke: 'yellow'});
-                // room.createConstructionSite(eoX, eoY, STRUCTURE_EXTENSION); // build extension
+                room.visual.circle(x + eoX, y + eoY, {stroke: 'blue'});
+                room.createConstructionSite(x + eoX, y + eoY, STRUCTURE_EXTENSION); // build extension
                 extensionsCreated++;
                 eo++;
 
