@@ -21,7 +21,7 @@ var workerManager = {
     as an available creep for job assignment
     */
 
-    var job_tracker = {store: 0, build: 0, repair:0, upgrade:0, open:0};
+    var job_tracker = {store: 0, build: 0, repair:0, upgrade:0, defend:0, open:0};
 
     for(var name in Game.creeps) {
       var creep = Game.creeps[name];
@@ -47,6 +47,10 @@ var workerManager = {
       else if(creep.memory.job == 'upgrade') {
         jobs.upgradeController(creep);
         job_tracker.upgrade++;
+      }
+      else if(creep.memory.job == 'defend') {
+        jobs.defendBase(creep);
+        job_tracker.defend++;
       }
       else if(creep.memory.job == null) {
         creep.room.memory.availableCreeps.push(creep.id);
