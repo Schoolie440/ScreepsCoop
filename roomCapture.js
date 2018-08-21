@@ -1,4 +1,3 @@
-var roomCaptureUtilities = require('roomCaptureUtilities');
 var handlerSpawns = require('handler.spawns');
 var jobs = require('jobs');
 
