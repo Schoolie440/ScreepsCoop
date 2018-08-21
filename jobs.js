@@ -211,8 +211,6 @@ var check = creep.claimController(creep.room.controller);
     } else {
       var target = creep.room.find(FIND_CONSTRUCTION_SITES, {filter: (site) => {
             return (site.structureType == STRUCTURE_SPAWN)}});
-      }
-
       if (target == null) {
         if (creep.room.find(FIND_MY_SPAWNS)) {
           flag.remove();
