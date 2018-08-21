@@ -50,7 +50,7 @@ module.exports.loop = function () {
     //See if a captureTarget Flag has been placed
     for (var name in Game.flags) {
       if (name == 'captureTarget') {
-        roomCapture.run(Game.flags(flagname));
+        roomCapture.run(Game.flags(name));
       }
     }
 
