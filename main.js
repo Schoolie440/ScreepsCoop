@@ -1,5 +1,4 @@
 var roleClaimer = require('role.claimer');
-var roleDefender = require('role.defender');
 var roleMiner = require('role.miner');
 var towerControls = require('tower.controls');
 var constructRoads = require('construct.roads');
