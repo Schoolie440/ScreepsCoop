@@ -68,7 +68,7 @@ var workerManager = {
       }
 
 
-      if(room.memory.availableCreeps.length > 0 && room.memory.activeBuilders <= 2) {
+      if(room.memory.availableCreeps.length > 0 && room.memory.activeBuilders <= 3) {
         var buildTargets = room.find(FIND_CONSTRUCTION_SITES);
         buildTargets.sort((b,a) => a.hits/a.hitsMax - b.hits/b.hitsMax);
 
