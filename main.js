@@ -8,6 +8,7 @@ var handlerSpawns = require('handler.spawns');
 var handlerArmySpawn = require('handler.armySpawn');
 var constructExtensions = require('construct.extensions');
 var workerManager = require('workerManager');
+var roomCapture = require('roomCapture');
 
 module.exports.loop = function () {
 
@@ -44,6 +45,17 @@ module.exports.loop = function () {
                 handlerSpawns.run(Game.spawns[i]);
             }
         }
+    }
+
+    //See if we should be capturing a room
+    var ownedRooms = 0;
+    for(var checkRoom in Game.rooms) {
+      if(Game.getObjectById(checkroom).controller.owner == 'Schoolie440') {
+        ownedRooms++;
+      }
+    }
+    if(ownedRooms < Game.gcl) {
+      roomCapture.run();
     }
 
     //deletes dead creeps from memory
