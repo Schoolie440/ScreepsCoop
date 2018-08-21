@@ -41,11 +41,7 @@ var jobs = {
       //if not working...
       else {
         //find closest source and harvest
-        var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-                return (source.energy > 0)}});
-        if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(source);
-        }
+        jobs.collectEnergy(creep);
       }
     },
 
@@ -89,11 +85,7 @@ var jobs = {
         //if not working...
         else {
           //find closest source and harvest
-          var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-                  return (source.energy > 0)}});
-          if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-              creep.moveTo(source);
-          }
+          jobs.collectEnergy(creep);
         }
       },
 
@@ -123,11 +115,7 @@ var jobs = {
     //creep is not working, i.e. needs energy
     else {
       //find closest source and harvest
-      var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-              return (source.energy > 0)}});
-      if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(source);
-      }
+      jobs.collectEnergy(creep);
     }
   },
 
@@ -155,11 +143,7 @@ var jobs = {
       }
 
     } else {
-      var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-              return (source.energy > 0)}});
-      if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(source);
-      }
+      jobs.collectEnergy(creep);
     }
   },
 
@@ -181,12 +165,7 @@ var jobs = {
     }
     //if we need energy
     else {
-        //find nearest source and harvest it
-        var sources = creep.room.find(FIND_SOURCES, {filter: (source) => {
-                return (source.energy > 0)}});
-        if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(sources[0]);
-        }
+      jobs.collectEnergy(creep);
     }
   },
 
@@ -224,6 +203,14 @@ var check = creep.claimController(creep.room.controller);
       } else {
         jobs.buildStructures(creep);
       }
+    }
+  },
+
+   collectEnergy: function(creep) {
+    var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
+            return (source.energy > 0)}});
+    if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(source);
     }
   }
 }
