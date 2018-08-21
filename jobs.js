@@ -217,7 +217,7 @@ var check = creep.claimController(creep.room.controller);
         }
       } else {
         creep.memory.target = target.id;
-        buildStructures(creep);
+        jobs.buildStructures(creep);
       }
     }
   }
