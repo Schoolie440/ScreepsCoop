@@ -205,7 +205,7 @@ var check = creep.claimController(creep.room.controller);
   },
 
   buildSpawn: function(creep, flag) {
-    if (creep.room != flag.room || (Math.abs(creep.pos.x - flag.pos.x)) > 15 && Math.abs(creep.pos.y - flag.pos.y) > 15) {
+    if (creep.room != flag.room) {
       creep.moveTo(flag);
     } else {
       var target = creep.room.find(FIND_CONSTRUCTION_SITES, {filter: (site) => {
