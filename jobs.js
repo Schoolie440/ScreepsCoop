@@ -192,7 +192,7 @@ var jobs = {
   captureRoom: function(creep, flag) {
 
     //move creep toward flag until in the same room
-    if (creep.room != flag.room) {
+    if (creep.room != flag.room || creep.pos.x > 48 || creep.pos.y > 48 ||creep.pos.x < 1 ||creep.pos.y < 1) {
       creep.moveTo(flag);
     } else {  //if creep is in same room as flag
 var check = creep.claimController(creep.room.controller);
