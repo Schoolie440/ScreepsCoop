@@ -31,8 +31,6 @@ var expansionFunctions = {
     if (spawnBuilder == null) {
       var spawnBuilder = Game.creeps[Object.keys(Game.creeps)[0]];
       spawnBuilder.memory.job = 'buildSpawn';
-      spawnBuilder.memory.target = null;
-      spawnBuilder.memory.working = false;
     } else {
       jobs.buildSpawn(spawnBuilder, flag);
     }
