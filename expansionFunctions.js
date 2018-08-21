@@ -22,7 +22,7 @@ var expansionFunctions = {
 
   buildFirstSpawn: function(flag) {
     var spawnBuilder;
-    for var creepName in Game.creeps) {
+    for (var creepName in Game.creeps) {
       if(Game.creeps[creepName].memory.job == 'buildSpawn') {
         spawnBuilder = Game.creeps[creepName];
       }
