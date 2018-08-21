@@ -208,15 +208,19 @@ var check = creep.claimController(creep.room.controller);
     if (creep.room != flag.room) {
       creep.moveTo(flag);
     } else {
-      var target = creep.room.find(FIND_CONSTRUCTION_SITES, {filter: (site) => {
-            return (site.structureType == STRUCTURE_SPAWN)}});
-      if (target == null) {
-        if (creep.room.find(FIND_MY_SPAWNS)) {
-          flag.remove();
-          creep.job = null;
+      if (creep.memory.target == null) {
+        var target = creep.room.find(FIND_CONSTRUCTION_SITES, {filter: (site) => {
+              return (site.structureType == STRUCTURE_SPAWN)}});
+        if (target == null) {
+          if (creep.room.find(FIND_MY_SPAWNS)) {
+            flag.remove();
+            creep.job = null;
+          }
+        } else {
+          creep.memory.target = target.id;
+          jobs.buildStructures(creep);
         }
       } else {
-        creep.memory.target = target.id;
         jobs.buildStructures(creep);
       }
     }
