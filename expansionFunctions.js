@@ -29,7 +29,7 @@ var expansionFunctions = {
     }
 
     if (spawnBuilder == null) {
-      Game.creeps[0].memory.job = 'buildSpawn';
+      Game.creeps[Object.keys(Game.creeps)[0]].memory.job = 'buildSpawn';
     } else {
       spawnBuilder.memory.target = null;
       spawnBuilder.memory.working = false;
