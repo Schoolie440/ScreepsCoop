@@ -111,9 +111,10 @@ var jobs = {
     }
 
     if(creep.memory.working) {
-      if(creep.build(target) == ERR_NOT_IN_RANGE) {
+      var check = creep.build(target);
+      if(check == ERR_NOT_IN_RANGE) {
         creep.moveTo(target);
-      } else if(creep.build(target) != OK) {
+      } else if(check != OK) {
         creep.memory.working = false;
         creep.memory.job = null;
         creep.memory.target = null;
