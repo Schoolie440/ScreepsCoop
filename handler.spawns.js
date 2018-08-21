@@ -33,7 +33,7 @@ var handlerSpawns = {
 
         var make = false;
 
-        if(Game.memory.needClaimer == true) {
+        if(Memory.needClaimer == true) {
           if (!spawn.createCreep([MOVE,CLAIM], null, {job: 'claim'})) {
             Game.memory.needClaimer == false;
           }
