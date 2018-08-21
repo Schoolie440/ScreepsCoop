@@ -14,7 +14,7 @@ var roomCapture = {
 
     if (claimerCreep == null) {
       //Spawn a claimer creep
-      handlerSpawns.claimer();
+      Game.memory.needClaimer = true;
     } else {
       //have the creep claim the room
       jobs.captureRoom(claimerCreep, flag);
