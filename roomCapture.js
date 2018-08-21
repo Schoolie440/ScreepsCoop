@@ -8,7 +8,7 @@ var roomCapture = {
     var claimerCreep;
     for (var creepName in Game.creeps) {
       if (Game.creeps[creepName].memory.job == 'claim') {
-        claimerCreep = Game.creeps(creepName);
+        claimerCreep = Game.creeps[creepName];
       }
     }
 
