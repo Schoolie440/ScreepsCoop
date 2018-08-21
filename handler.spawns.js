@@ -35,8 +35,8 @@ var handlerSpawns = {
 
         if(Memory.needClaimer == true) {
           var check = spawn.createCreep([MOVE,CLAIM], null, {job: 'claim'});
-          if (check == OK || check == ERR_BUSY) {
-            Game.memory.needClaimer == false;
+          if (check == OK) {
+            Game.memory.needClaimer = false;
           }
         }
 
