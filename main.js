@@ -24,13 +24,6 @@ module.exports.loop = function () {
         towerControls.attack(towers[i]);
     }
 
-    if(false) {
-        constructExtensions.run(Game.rooms['W12S56']);
-        constructExtensions.run(Game.rooms['W12S56']);
-        constructExtensions.run(Game.rooms['W12S56']);
-        constructRoads.run(Game.rooms['W12S56']);
-    }
-
     if(Game.time % 20 == 0) {
         //loops through all spawns and runs auto spawn module
         for(var i in Game.spawns) {
