@@ -34,6 +34,24 @@ var handlerSpawns = {
 
         var make = false;
 
+        var workParts = 0
+        for (let c of workerCreeps) {
+          for (let b in c.body) {
+            if (c.body[b].type === WORK)
+            {
+              workParts++;
+            }
+          }
+        }
+        var maxEnergyPerTick = workParts * 2;
+
+        var energyPerPart = (50 + 100 + 50) / 3;  // work + carry + move
+        var ticksPerPart = 3;  // 3 ticks per body part
+        var energyPerTick = energyPerPart / ticksPerPart;
+
+        var ticksPerCreep = (works + carries + moves) * ticksPerPart;
+        console.log(maxEnergyPerTick, energyPerTick, ticksPerCreep);
+
 
         //spawn creep, if conditions are correct
         if(workerCreeps.length < 7) {
