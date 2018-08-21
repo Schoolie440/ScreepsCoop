@@ -47,15 +47,11 @@ module.exports.loop = function () {
         }
     }
 
-    //See if we should be capturing a room
-    var ownedRooms = 0;
-    for(var checkRoom in Game.rooms) {
-      if(Game.getObjectById(checkroom).controller.owner == 'Schoolie440') {
-        ownedRooms++;
+    //See if a captureTarget Flag has been placed
+    for (var name in Game.flags) {
+      if (name == 'captureTarget') {
+        roomCapture.run(Game.flags(flagname));
       }
-    }
-    if(ownedRooms < Game.gcl) {
-      roomCapture.run();
     }
 
     //deletes dead creeps from memory

@@ -1,11 +1,24 @@
 var roomCaptureUtilities = require('roomCaptureUtilities');
+var handlerSpawns = require('handlerSpawns');
+var jobs = require('jobs');
 
 var roomCapture = {
 
-  run: function() {
+  run: function(flag) {
+    var claimerCreep;
+    for (var creepName in Game.creeps) {
+      if (Game.creeps(creepName).memory.job == 'claim') {
+        claimerCreep = Game.creeps(creepName);
+      }
+    }
 
-    var exits = roomCaptureUtilities.findExits(room);
-
+    if (claimerCreep == null) {
+      //Spawn a claimer creep
+      handlerSpawns.claimer();
+    } else {
+      //have the creep claim the room
+      jobs.captureRoom(claimerCreep, flag);
+    }
   }
 }
 

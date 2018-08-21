@@ -43,6 +43,10 @@ var handlerSpawns = {
         if(workerCreeps.length == 0) {
             spawn.createCreep([WORK,CARRY,MOVE], null, {job: null, target: null, working: false});
         }
+    },
+
+    claimer: function() {
+      spawn.createCreep([MOVE,CLAIM], null, {job: 'claim', target: null, working: false});
     }
 }
 

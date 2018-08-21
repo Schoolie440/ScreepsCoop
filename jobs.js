@@ -15,87 +15,29 @@ var jobs = {
         //find nearest non-full depository
         var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                   filter: (structure) => {
-                      return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
+                      return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_TOWER) &&
                           structure.energy < structure.energyCapacity;
                   }
         });
-        if(target) {
-          creep.memory.target = target.id;
-        }
-        else {
-          creep.memory.job = null;
-          creep.memory.working = false
-        }
+        creep.memory.target = target.id;
       }
         //if there is a non-full extension/spawn/tower:
         if(creep.memory.target != null) {
-          //transfer energy into it
-          if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-              creep.moveTo(Game.getObjectById(creep.memory.target));
-          }
-          else if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_FULL) {
-              creep.memory.target = null;
-          }
+            //transfer energy into it
+            if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(Game.getObjectById(creep.memory.target));
+            }
         }
       }
       //if not working...
       else {
         //find closest source and harvest
-        var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-                return (source.energy > 0)}});
+        var source = creep.pos.findClosestByRange(FIND_SOURCES);
         if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
             creep.moveTo(source);
         }
       }
     },
-
-    towerCaddy: function(creep) {
-      if(creep.memory.working && creep.carry.energy == 0) {
-            creep.memory.working = false;
-            creep.memory.job = null;
-      }
-      if(!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
-          creep.memory.working = true;
-      }
-
-      if(creep.memory.working) {
-        if(creep.memory.target == null) {
-          //find nearest non-full depository
-          var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_TOWER &&
-                            structure.energy < structure.energyCapacity);
-                    }
-          });
-          if(target) {
-            creep.memory.target = target.id;
-          }
-          else {
-            creep.memory.job = null;
-            creep.memory.working = false
-          }
-        }
-          //if there is a non-full extension/spawn/tower:
-          if(creep.memory.target != null) {
-            //transfer energy into it
-            if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(Game.getObjectById(creep.memory.target));
-            }
-            else if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_FULL) {
-                creep.memory.target = null;
-            }
-          }
-        }
-        //if not working...
-        else {
-          //find closest source and harvest
-          var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-                  return (source.energy > 0)}});
-          if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-              creep.moveTo(source);
-          }
-        }
-      },
 
   buildStructures: function(creep) {
 
@@ -122,8 +64,7 @@ var jobs = {
     //creep is not working, i.e. needs energy
     else {
       //find closest source and harvest
-      var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-              return (source.energy > 0)}});
+      var source = creep.pos.findClosestByRange(FIND_SOURCES);
       if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
           creep.moveTo(source);
       }
@@ -142,21 +83,19 @@ var jobs = {
     }
 
     if(creep.memory.working) {
-      var repairTarget = Game.getObjectById(creep.memory.target);
+      var target = Game.getObjectById(creep.memory.target);
 
-      if(creep.repair(repairTarget) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(repairTarget);
+      if(creep.repair(target) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(target);
       }
 
-      if(repairTarget.hits == repairTarget.hitsMax) {
+      if(target.hits == target.hitsMax) {
+          creep.memory.working = false;
           creep.memory.target = null;
           creep.memory.job = null;
-          creep.memory.working = false;
       }
-
     } else {
-      var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-              return (source.energy > 0)}});
+      var source = creep.pos.findClosestByRange(FIND_SOURCES);
       if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
           creep.moveTo(source);
       }
@@ -166,7 +105,6 @@ var jobs = {
   upgradeController: function(creep) {
     if(creep.memory.working && creep.carry.energy == 0) {
         creep.memory.working = false;
-        creep.memory.job = null;
     }
     if(!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
       creep.memory.working = true;
@@ -182,12 +120,25 @@ var jobs = {
     //if we need energy
     else {
         //find nearest source and harvest it
-        var sources = creep.room.find(FIND_SOURCES, {filter: (source) => {
-                return (source.energy > 0)}});
-        if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(sources[0]);
+        var source = creep.pos.findClosestByRange(FIND_SOURCES);
+        if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(source);
         }
     }
+  },
+
+  captureRoom: function(creep, flag) {
+
+    //move creep toward flag until in the same room
+    if (creep.room != flag.room) {
+      creep.moveTo(flag);
+    } else {  //if creep is in same room as flag
+      if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(creep.room.controller);
+      }
+    }
+
+
   }
 }
 
