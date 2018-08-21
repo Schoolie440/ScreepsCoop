@@ -8,7 +8,6 @@ var handlerSpawns = require('handler.spawns');
 var handlerArmySpawn = require('handler.armySpawn');
 var constructExtensions = require('construct.extensions');
 var workerManager = require('workerManager');
-var roomCapture = require('roomCapture');
 
 module.exports.loop = function () {
 
