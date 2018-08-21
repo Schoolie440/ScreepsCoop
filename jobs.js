@@ -187,6 +187,20 @@ var jobs = {
             creep.moveTo(sources[0]);
         }
     }
+  },
+
+  captureRoom: function(creep, flag) {
+
+    //move creep toward flag until in the same room
+    if (creep.room != flag.room) {
+      creep.moveTo(flag);
+    } else {  //if creep is in same room as flag
+      if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(creep.room.controller);
+      }
+    }
+
+
   }
 }
 
