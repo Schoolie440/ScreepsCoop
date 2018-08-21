@@ -8,7 +8,7 @@ var handlerSpawns = require('handler.spawns');
 var handlerArmySpawn = require('handler.armySpawn');
 var constructExtensions = require('construct.extensions');
 var workerManager = require('workerManager');
-var roomCapture = require('roomCapture');
+var expansionFunctions = require('expansionFunctions');
 
 module.exports.loop = function () {
 
@@ -50,9 +50,13 @@ module.exports.loop = function () {
     //See if a captureTarget Flag has been placed
     for (var name in Game.flags) {
       if (name == 'captureTarget') {
-        roomCapture.run(Game.flags[name]);
+        expansionFunctions.roomCapture(Game.flags[name]);
+      } else if (name == 'firstSpawn') {
+        expansionFunctions.buildFirstSpawn(Game.flags[name]);
       }
     }
+
+
 
     //deletes dead creeps from memory
     for(var i in Memory.creeps) {

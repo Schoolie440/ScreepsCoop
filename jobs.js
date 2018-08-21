@@ -1,3 +1,4 @@
+var expansionFunctions = require('expansionFunctions');
 
 var jobs = {
 
@@ -195,12 +196,33 @@ var jobs = {
     if (creep.room != flag.room) {
       creep.moveTo(flag);
     } else {  //if creep is in same room as flag
-      if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+var check = creep.claimController(creep.room.controller);
+      if (check == ERR_NOT_IN_RANGE) {
         creep.moveTo(creep.room.controller);
+      } else if (check == OK) {
+        flag.remove();
       }
     }
+  },
 
+  buildSpawn: function(creep, flag) {
+    if (creep.room != flag.room) {
+      creep.moveTo(flag);
+    } else {
+      var target = creep.room.find(FIND_CONSTRUCTION_SITES, {filter: (site) => {
+            return (site.structureType == STRUCTURE_SPAWN)}});
+      }
 
+      if (target == null) {
+        if (creep.room.find(FIND_MY_SPAWNS)) {
+          flag.remove();
+          creep.job = null;
+        }
+      } else {
+        creep.memory.target = target.id;
+        jobs.buildStructures(creep);
+      }
+    }
   }
 }
 
