@@ -185,7 +185,7 @@ var check = creep.claimController(creep.room.controller);
   },
 
   buildSpawn: function(creep, flag) {
-    if (creep.room != flag.room) {
+    if (creep.room != flag.room || creep.pos.x > 48 || creep.pos.y > 48 ||creep.pos.x < 1 ||creep.pos.y < 1) {
       creep.moveTo(flag);
     } else {
       if (creep.memory.target == null) {
