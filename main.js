@@ -37,6 +37,12 @@ module.exports.loop = function () {
         }
     }
 
+    for (let r in Game.rooms) {
+      var room = Game.rooms[r];
+      // constructExtensions.run(room);
+      constructRoads.run(room);
+    }
+
     //See if a captureTarget Flag has been placed
     for (var name in Game.flags) {
       if (name == 'captureTarget') {
