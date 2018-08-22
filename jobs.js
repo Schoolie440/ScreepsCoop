@@ -41,11 +41,7 @@ var jobs = {
       //if not working...
       else {
         //find closest source and harvest
-        var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-                return (source.energy > 0)}});
-        if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(source);
-        }
+        jobs.collectEnergy(creep);
       }
     },
 
@@ -89,11 +85,7 @@ var jobs = {
         //if not working...
         else {
           //find closest source and harvest
-          var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-                  return (source.energy > 0)}});
-          if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-              creep.moveTo(source);
-          }
+          jobs.collectEnergy(creep);
         }
       },
 
@@ -111,9 +103,10 @@ var jobs = {
     }
 
     if(creep.memory.working) {
-      if(creep.build(target) == ERR_NOT_IN_RANGE) {
+      var check = creep.build(target);
+      if(check == ERR_NOT_IN_RANGE) {
         creep.moveTo(target);
-      } else if(creep.build(target) != OK) {
+      } else if(check != OK) {
         creep.memory.working = false;
         creep.memory.job = null;
         creep.memory.target = null;
@@ -122,11 +115,7 @@ var jobs = {
     //creep is not working, i.e. needs energy
     else {
       //find closest source and harvest
-      var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-              return (source.energy > 0)}});
-      if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(source);
-      }
+      jobs.collectEnergy(creep);
     }
   },
 
@@ -151,15 +140,10 @@ var jobs = {
       if(repairTarget.hits == repairTarget.hitsMax) {
           creep.memory.target = null;
           creep.memory.job = null;
-          creep.memory.working = false;
       }
 
     } else {
-      var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-              return (source.energy > 0)}});
-      if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(source);
-      }
+      jobs.collectEnergy(creep);
     }
   },
 
@@ -181,12 +165,52 @@ var jobs = {
     }
     //if we need energy
     else {
-        //find nearest source and harvest it
-        var sources = creep.room.find(FIND_SOURCES, {filter: (source) => {
-                return (source.energy > 0)}});
-        if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(sources[0]);
+      jobs.collectEnergy(creep);
+    }
+  },
+
+  captureRoom: function(creep, flag) {
+
+    //move creep toward flag until in the same room
+    if (creep.room != flag.room || creep.pos.x > 48 || creep.pos.y > 48 ||creep.pos.x < 1 ||creep.pos.y < 1) {
+      creep.moveTo(flag);
+    } else {  //if creep is in same room as flag
+var check = creep.claimController(creep.room.controller);
+      if (check == ERR_NOT_IN_RANGE) {
+        creep.moveTo(creep.room.controller);
+      } else if (check == OK) {
+        flag.remove();
+      }
+    }
+  },
+
+  buildSpawn: function(creep, flag) {
+    if (creep.room != flag.room || creep.pos.x > 48 || creep.pos.y > 48 ||creep.pos.x < 1 ||creep.pos.y < 1) {
+      creep.moveTo(flag);
+    } else {
+      if (creep.memory.target == null) {
+        var target = creep.room.find(FIND_CONSTRUCTION_SITES, {filter: (site) => {
+              return (site.structureType == STRUCTURE_SPAWN)}});
+        if (target == null) {
+          if (creep.room.find(FIND_MY_SPAWNS)) {
+            flag.remove();
+            creep.job = null;
+          }
+        } else {
+          creep.memory.target = target.id;
+          jobs.buildStructures(creep);
         }
+      } else {
+        jobs.buildStructures(creep);
+      }
+    }
+  },
+
+   collectEnergy: function(creep) {
+    var source = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
+            return (source.energy > 0)}});
+    if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(source);
     }
   },
   defendBase: function(creep) {

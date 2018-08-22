@@ -34,6 +34,12 @@ var handlerSpawns = {
 
         var make = false;
 
+        if(Memory.needClaimer == true) {
+          var check = spawn.createCreep([MOVE,CLAIM], null, {job: 'claim'});
+          if (check == OK) {
+            Game.memory.needClaimer = false;
+          }
+        }
 
         //spawn creep, if conditions are correct
         if(workerCreeps.length < 7) {
@@ -44,7 +50,7 @@ var handlerSpawns = {
         if(workerCreeps.length == 0) {
             spawn.createCreep([WORK,CARRY,MOVE], null, {job: null, target: null, working: false});
         }
-    }
+    },
 }
 
 module.exports = handlerSpawns;
