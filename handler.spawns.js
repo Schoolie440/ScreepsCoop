@@ -3,7 +3,8 @@ var handlerSpawns = {
 
         //Currently finds all creeps since right now all creeps are worker creeps
         //find all types of creeps for counting purposes
-        var workerCreeps = spawn.room.find(FIND_MY_CREEPS);
+        // var workerCreeps = spawn.room.find(FIND_MY_CREEPS);
+        var workerCreeps = _.filter(spawn.room.find(FIND_MY_CREEPS), (creep) => creep.memory.job != 'defender');
 
         //determine desired amounts of each body part
         var energyCap = spawn.room.energyCapacityAvailable;
@@ -33,6 +34,12 @@ var handlerSpawns = {
 
         var make = false;
 
+        if(Memory.needClaimer == true) {
+          var check = spawn.createCreep([MOVE,CLAIM], null, {job: 'claim'});
+          if (check == OK) {
+            Game.memory.needClaimer = false;
+          }
+        }
 
         //spawn creep, if conditions are correct
         if(workerCreeps.length < 7) {
@@ -43,7 +50,7 @@ var handlerSpawns = {
         if(workerCreeps.length == 0) {
             spawn.createCreep([WORK,CARRY,MOVE], null, {job: null, target: null, working: false});
         }
-    }
+    },
 }
 
 module.exports = handlerSpawns;

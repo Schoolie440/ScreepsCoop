@@ -5,7 +5,7 @@ var constructRoads = {
         if (!room.memory.roadsBuilt) {
 
             console.log('Building Roads');
-            
+
             //find spawns/sources
             var sources = room.find(FIND_SOURCES);
             var spawners = room.find(FIND_MY_SPAWNS);

@@ -1,13 +1,11 @@
-var roleClaimer = require('role.claimer');
-var roleDefender = require('role.defender');
 var roleMiner = require('role.miner');
 var towerControls = require('tower.controls');
 var constructRoads = require('construct.roads');
-var handlerOtherRoom = require('handler.otherRoom');
 var handlerSpawns = require('handler.spawns');
 var handlerArmySpawn = require('handler.armySpawn');
 var constructExtensions = require('construct.extensions');
 var workerManager = require('workerManager');
+var expansionFunctions = require('expansionFunctions');
 
 module.exports.loop = function () {
 
@@ -22,14 +20,6 @@ module.exports.loop = function () {
         towerControls.attack(towers[i]);
     }
 
-    if(true) {  // construcion site generation
-        myRoom = Game.spawns['Spawn1'].room; //TODO: Generalize for multiple rooms / spawns
-
-        constructExtensions.run(myRoom);
-        // constructExtensions.run(Game.rooms['W12S56']);
-        // constructExtensions.run(Game.rooms['W12S56']);
-        constructRoads.run(myRoom);
-    }
 
     if(Game.time % 20 == 0) {
         //loops through all spawns and runs auto spawn module
@@ -46,6 +36,23 @@ module.exports.loop = function () {
             }
         }
     }
+
+    for (let r in Game.rooms) {
+      var room = Game.rooms[r];
+      // constructExtensions.run(room);
+      constructRoads.run(room);
+    }
+
+    //See if a captureTarget Flag has been placed
+    for (var name in Game.flags) {
+      if (name == 'captureTarget') {
+        expansionFunctions.roomCapture(Game.flags[name]);
+      } else if (name == 'firstSpawn') {
+        expansionFunctions.buildFirstSpawn(Game.flags[name]);
+      }
+    }
+
+
 
     //deletes dead creeps from memory
     for(var i in Memory.creeps) {
