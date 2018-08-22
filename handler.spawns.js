@@ -3,7 +3,8 @@ var handlerSpawns = {
 
         //Currently finds all creeps since right now all creeps are worker creeps
         //find all types of creeps for counting purposes
-        var workerCreeps = spawn.room.find(FIND_MY_CREEPS);
+        // var workerCreeps = spawn.room.find(FIND_MY_CREEPS);
+        var workerCreeps = _.filter(spawn.room.find(FIND_MY_CREEPS), (creep) => creep.memory.job != 'defender');
 
         //determine desired amounts of each body part
         var energyCap = spawn.room.energyCapacityAvailable;
