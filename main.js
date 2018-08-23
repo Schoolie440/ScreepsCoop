@@ -41,10 +41,10 @@ module.exports.loop = function () {
 
             //if enemies present, shut down regular creep production, start military
             if(enemies.length) {
-                handlerArmySpawn.run(Game.spawns[i]);
+                handlerArmySpawn.run(Game.spawns[i, armyCreeps]);
             }
             else {
-                handlerSpawns.run(Game.spawns[i]);
+                handlerSpawns.run(Game.spawns[i], workerCreeps);
             }
         }
     }
