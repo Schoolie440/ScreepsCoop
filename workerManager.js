@@ -48,7 +48,7 @@ var workerManager = {
         jobs.upgradeController(creep);
         job_tracker.upgrade++;
       }
-      else if(creep.memory.job == 'defend') {
+      else if(creep.memory.job == 'defender') {
         jobs.defendBase(creep);
         job_tracker.defend++;
       }
