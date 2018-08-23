@@ -9,8 +9,8 @@ var armyManager = {
     as an available creep for job assignment
     */
 
-    for(var creepID in armyCreeps) {
-      var creep = Game.getObjectById(creepID);
+    for(var i in armyCreeps) {
+      var creep = Game.getObjectById(armyCreeps[i]);
       if(creep.memory.order == 'defend') {
         orders.defendBase(creep);
       } else {
@@ -18,7 +18,7 @@ var armyManager = {
         orders.defendBase(creep);
       }
     }
-
+  }
 }
 
 module.exports = armyManager;

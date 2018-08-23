@@ -23,8 +23,10 @@ var workerManager = {
 
     var job_tracker = {store: 0, build: 0, repair:0, upgrade:0, defend:0, open:0};
 
-    for(var creepID in workerCreeps) {
-      var creep = Game.getObjectById(creepID);
+    for(var i in workerCreeps) {
+
+      var creep = Game.getObjectById(workerCreeps[i]);
+
       if(creep.memory.job == 'store') {
         if(creep.memory.working) {
           creep.room.memory.activeEnergy += creep.carry[RESOURCE_ENERGY];

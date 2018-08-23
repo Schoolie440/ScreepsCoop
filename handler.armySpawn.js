@@ -24,23 +24,24 @@ var handlerArmySpawn = {
             bodyParts.push(ATTACK);
         }
 
-        var newRole;
+        var newJob;
         var make = false;
 
         //construct defenders, little fast ones first, then big ones
         if(defenders.length < 3) {
-            newRole = 'defender';
+            newJob = 'defender';
             bodyParts = [MOVE,MOVE,ATTACK,ATTACK]
             make = true;
         }
         else if(defenders.length < 6) {
-            newRole = 'defender';
+            newJob = 'defender';
             make = true;
         }
 
         //spawn defenders, if conditions are correct
         if(make) {
-            spawn.createCreep(bodyParts,null,{job: newRole});
+          console.log('Spawning Defender');
+          spawn.createCreep(bodyParts,null,{class: 'army', job: newJob});
         }
     }
 }
