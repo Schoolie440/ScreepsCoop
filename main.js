@@ -5,13 +5,25 @@ var handlerSpawns = require('handler.spawns');
 var handlerArmySpawn = require('handler.armySpawn');
 var constructExtensions = require('construct.extensions');
 var workerManager = require('workerManager');
+var armyManager = require('armyManager');
 var expansionFunctions = require('expansionFunctions');
 
 module.exports.loop = function () {
 
+    var workerCreeps = [];
+    var armyCreeps = [];
+
+    for (var creepName in Game.creeps) {
+      if (Game.creeps[creepName].memory.class == 'worker') {
+        workerCreeps.push(Game.creeps[creepName].id);
+      } else if (Game.creeps[creepName].memory.class == 'army') {
+        armyCreeps.push(Game.creeps[creepName].id);
+      }
+    }
 
     //Runs all worker creep operation scripts if creeps exist
-    workerManager.run();
+    workerManager.run(workerCreeps);
+    armyManager.run(armyCreeps);
 
     //Finds all towers
     var towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
@@ -29,10 +41,10 @@ module.exports.loop = function () {
 
             //if enemies present, shut down regular creep production, start military
             if(enemies.length) {
-                handlerArmySpawn.run(Game.spawns[i]);
+                handlerArmySpawn.run(Game.spawns[i, armyCreeps]);
             }
             else {
-                handlerSpawns.run(Game.spawns[i]);
+                handlerSpawns.run(Game.spawns[i], workerCreeps);
             }
         }
     }

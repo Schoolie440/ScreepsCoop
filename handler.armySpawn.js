@@ -1,8 +1,5 @@
 var handlerArmySpawn = {
-    run: function(spawn) {
-
-        //find defenders for counting purposes
-        var defenders = _.filter(spawn.room.find(FIND_MY_CREEPS), (creep) => creep.memory.job == 'defend');
+    run: function(spawn, armyCreeps) {
 
         //determines desired number of each body part
         var energyCap = spawn.room.energyCapacityAvailable;
@@ -24,23 +21,24 @@ var handlerArmySpawn = {
             bodyParts.push(ATTACK);
         }
 
-        var newRole;
+        var newJob;
         var make = false;
 
-        //construct defenders, little fast ones first, then big ones
-        if(defenders.length < 3) {
-            newRole = 'defender';
+        //construct armyCreeps, little fast ones first, then big ones
+        if(armyCreeps.length < 3) {
+            newJob = 'defender';
             bodyParts = [MOVE,MOVE,ATTACK,ATTACK]
             make = true;
         }
-        else if(defenders.length < 6) {
-            newRole = 'defender';
+        else if(armyCreeps.length < 6) {
+            newJob = 'defender';
             make = true;
         }
 
-        //spawn defenders, if conditions are correct
+        //spawn armyCreeps, if conditions are correct
         if(make) {
-            spawn.createCreep(bodyParts,null,{job: newRole});
+          console.log('Spawning Defender');
+          spawn.createCreep(bodyParts,null,{class: 'army', job: newJob});
         }
     }
 }
