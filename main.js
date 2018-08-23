@@ -5,6 +5,7 @@ var handlerSpawns = require('handler.spawns');
 var handlerArmySpawn = require('handler.armySpawn');
 var constructExtensions = require('construct.extensions');
 var workerManager = require('workerManager');
+var armyManager = require('armyManager');
 var expansionFunctions = require('expansionFunctions');
 
 module.exports.loop = function () {
