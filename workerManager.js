@@ -2,7 +2,7 @@ var jobs = require('jobs');
 
 var workerManager = {
 
-  run: function() {
+  run: function(workerCreeps) {
 
     /*loops through all rooms and clears the decisionmaking
     data from each so it can be recalculated
@@ -23,8 +23,8 @@ var workerManager = {
 
     var job_tracker = {store: 0, build: 0, repair:0, upgrade:0, defend:0, open:0};
 
-    for(var name in Game.creeps) {
-      var creep = Game.creeps[name];
+    for(var creepID in workerCreeps) {
+      var creep = Game.getObjectById(creepID);
       if(creep.memory.job == 'store') {
         if(creep.memory.working) {
           creep.room.memory.activeEnergy += creep.carry[RESOURCE_ENERGY];
