@@ -20,19 +20,28 @@ var expansionFunctions = {
     }
   },
 
-  buildFirstSpawn: function(flag) {
-    var spawnBuilder;
+  roomHelp: function(flag) {
+    var roomHelper;
     for (var creepName in Game.creeps) {
-      if(Game.creeps[creepName].memory.job == 'buildSpawn') {
-        spawnBuilder = Game.creeps[creepName];
+      if(Game.creeps[creepName].memory.assignment == 'helpRoom') {
+        roomHelper = Game.creeps[creepName];
       }
     }
 
-    if (spawnBuilder == null) {
-      var spawnBuilder = Game.creeps[Object.keys(Game.creeps)[Object.keys(Game.creeps).length - 1]];
-      spawnBuilder.memory.job = 'buildSpawn';
+    if (roomHelper == null) {
+      var i = 0;
+      var found = false;
+      while (i < Object.keys(Game.creeps).length - 1 && !found) {
+        roomHelper = Game.creeps[Object.keys(Game.creeps)[Object.keys(Game.creeps).length - 1 - i]];
+        if (roomHelper.room != flag.room) {
+          found = true;
+        }
+        i++
+      }
+      roomHelper.memory.assignment = 'helpRoom';
+      roomHelper.memory.job = 'moving';
     } else {
-      jobs.buildSpawn(spawnBuilder, flag);
+      jobs.helpRoom(roomHelper, flag);
     }
   }
 }
