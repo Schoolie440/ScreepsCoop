@@ -13,7 +13,35 @@ var handlerSpawns = {
         var carries = Math.floor(fifties*1/4);
         var moves = Math.floor(fifties*1/4);
 
-        var bodyPartCap = 15;
+        var bodyPartCap;
+
+        //Not a huge fan of this since it runs in On^2 time
+        var worksInRoom = 0;
+        for (var creep in workerCreeps) {
+          for (var part in creep.body) {
+            if (creep.body[part].type == WORK) {
+              worksInRoom++;
+            }
+          }
+        }
+
+        switch (true) {
+          case: worksInRoom == 0
+            bodyPartCap = 3;
+            break;
+          case: worksInRoom < 3
+            bodyPartCap = 6;
+            break;
+          case: worksInRoom < 6
+            bodyPartCap = 9
+            break;
+          case: worksInRoom < 12
+            bodyPartCap = 12
+            break;
+          default:
+            bodyPartCap = 15;
+        }
+
 
         if(works+carries+moves > bodyPartCap) {
             works = carries = moves = bodyPartCap/3;
