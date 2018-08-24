@@ -71,7 +71,7 @@ var jobs = {
             creep.memory.working = false
           }
         }
-          //if there is a non-full extension/spawn/tower:
+          //if there is a non-full tower:
           if(creep.memory.target != null) {
             //transfer energy into it
             if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -186,25 +186,11 @@ var check = creep.claimController(creep.room.controller);
     }
   },
 
-  buildSpawn: function(creep, flag) {
+  helpRoom: function(creep, flag) {
     if (creep.room != flag.room || creep.pos.x > 48 || creep.pos.y > 48 ||creep.pos.x < 1 ||creep.pos.y < 1) {
       creep.moveTo(flag);
-    } else {
-      if (creep.memory.target == null) {
-        var target = creep.room.find(FIND_CONSTRUCTION_SITES, {filter: (site) => {
-              return (site.structureType == STRUCTURE_SPAWN)}});
-        if (target == null) {
-          if (creep.room.find(FIND_MY_SPAWNS)) {
-            flag.remove();
-            creep.job = null;
-          }
-        } else {
-          creep.memory.target = target.id;
-          jobs.buildStructures(creep);
-        }
-      } else {
-        jobs.buildStructures(creep);
-      }
+    } else if (creep.memory.job == 'moving') {
+      creep.memory.job = null;
     }
   },
 
