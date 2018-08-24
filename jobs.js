@@ -71,7 +71,7 @@ var jobs = {
             creep.memory.working = false
           }
         }
-          //if there is a non-full extension/spawn/tower:
+          //if there is a non-full tower:
           if(creep.memory.target != null) {
             //transfer energy into it
             if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
