@@ -45,7 +45,7 @@ var jobs = {
       }
     },
 
-    towerCaddy: function(creep) {
+    fillTowers: function(creep) {
       if(creep.memory.working && creep.carry.energy == 0) {
             creep.memory.working = false;
             creep.memory.job = null;
