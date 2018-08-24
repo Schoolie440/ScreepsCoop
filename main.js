@@ -39,7 +39,7 @@ module.exports.loop = function () {
 
     for (let r in Game.rooms) {
       var room = Game.rooms[r];
-      // constructExtensions.run(room);
+      constructExtensions.run(room);
       constructRoads.run(room);
     }
 
