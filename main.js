@@ -59,8 +59,8 @@ module.exports.loop = function () {
     for (var name in Game.flags) {
       if (name == 'captureTarget') {
         expansionFunctions.roomCapture(Game.flags[name]);
-      } else if (name == 'firstSpawn') {
-        expansionFunctions.buildFirstSpawn(Game.flags[name]);
+      } else if (name == 'roomHelp') {
+        expansionFunctions.roomHelp(Game.flags[name]);
       }
     }
 

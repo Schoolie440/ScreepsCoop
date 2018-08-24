@@ -123,27 +123,29 @@ var jobs = {
 
     if(creep.memory.working && creep.carry.energy == 0) {
           creep.memory.working = false;
-          creep.memory.target = null;
           creep.memory.job = null;
     }
     if(!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
         creep.memory.working = true;
     }
 
-    if(creep.memory.working) {
-      var repairTarget = Game.getObjectById(creep.memory.target);
+    if (creep.memory.target) {
+      if(creep.memory.working) {
+        var repairTarget = Game.getObjectById(creep.memory.target);
 
-      if(creep.repair(repairTarget) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(repairTarget);
+        if(creep.repair(repairTarget) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(repairTarget);
+        }
+
+        if(repairTarget.hits == repairTarget.hitsMax) {
+            creep.memory.target = null;
+            creep.memory.job = null;
+        }
+      } else {
+        jobs.collectEnergy(creep);
       }
-
-      if(repairTarget.hits == repairTarget.hitsMax) {
-          creep.memory.target = null;
-          creep.memory.job = null;
-      }
-
     } else {
-      jobs.collectEnergy(creep);
+      creep.memory.job = null;
     }
   },
 
