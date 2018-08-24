@@ -2,7 +2,10 @@ var jobs = require('jobs');
 
 var workerManager = {
 
-  run: function() {
+  run: function(workerCreeps) {
+
+    const CADDY_LIMIT = 1;
+    const BUILDER_LIMIT = 3;
 
     /*loops through all rooms and clears the decisionmaking
     data from each so it can be recalculated
@@ -11,6 +14,7 @@ var workerManager = {
       var room = Game.rooms[roomName];
       room.memory.activeEnergy = 0;
       room.memory.activeBuilders = 0;
+      room.memory.activeCaddies = 0;
       room.memory.activeTargets = [];
       room.memory.availableCreeps = [];
     }
@@ -21,10 +25,12 @@ var workerManager = {
     as an available creep for job assignment
     */
 
-    var job_tracker = {store: 0, build: 0, repair:0, upgrade:0, defend:0, open:0};
+    var job_tracker = {store: 0, caddy: 0, build: 0, repair:0, upgrade:0, defend:0, open:0};
 
-    for(var name in Game.creeps) {
-      var creep = Game.creeps[name];
+    for(var i in workerCreeps) {
+
+      var creep = Game.getObjectById(workerCreeps[i]);
+
       if(creep.memory.job == 'store') {
         if(creep.memory.working) {
           creep.room.memory.activeEnergy += creep.carry[RESOURCE_ENERGY];
@@ -33,6 +39,11 @@ var workerManager = {
         }
         jobs.storeEnergy(creep);
         job_tracker.store++;
+      }
+      else if (creep.memory.job == 'caddy') {
+        creep.room.memory.activeCaddies++;
+        jobs.fillTowers(creep);
+        job_tracker.caddy++;
       }
       else if(creep.memory.job == 'build') {
         creep.room.memory.activeBuilders++;
@@ -48,7 +59,7 @@ var workerManager = {
         jobs.upgradeController(creep);
         job_tracker.upgrade++;
       }
-      else if(creep.memory.job == 'defend') {
+      else if(creep.memory.job == 'defender') {
         jobs.defendBase(creep);
         job_tracker.defend++;
       }
@@ -70,13 +81,22 @@ var workerManager = {
         energyNeeded -= newCreep.carryCapacity;
         room.memory.availableCreeps.shift();
       }
+      var towers = room.find(FIND_STRUCTURES, {filter: (structure) => {
+            return (structure.structureType == STRUCTURE_TOWER) && (structure.energy < structure.energyCapacity)}});
 
+      while (room.memory.availableCreeps.length > 0 && room.memory.activeCaddies < CADDY_LIMIT && towers != null) {
+        var newCreep = Game.getObjectById(room.memory.availableCreeps[0]);
+        newCreep.memory.job = 'caddy';
+        room.memory.activeCaddies++;
+        jobs.fillTowers(newCreep);
+        room.memory.availableCreeps.shift();
+      }
 
-      if(room.memory.availableCreeps.length > 0 && room.memory.activeBuilders <= 3) {
+      if(room.memory.availableCreeps.length > 0 && room.memory.activeBuilders < BUILDER_LIMIT) {
         var buildTargets = room.find(FIND_CONSTRUCTION_SITES);
         buildTargets.sort((b,a) => a.hits/a.hitsMax - b.hits/b.hitsMax);
 
-        while(buildTargets.length && room.memory.availableCreeps.length > 0 && room.memory.activeBuilders <= 2) {
+        while(buildTargets.length && room.memory.availableCreeps.length > 0 && room.memory.activeBuilders < BUILDER_LIMIT) {
           var newCreep = Game.getObjectById(room.memory.availableCreeps[0]);
           newCreep.memory.job = 'build';
           newCreep.memory.target = buildTargets[0].id;

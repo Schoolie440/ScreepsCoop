@@ -43,12 +43,12 @@ var handlerSpawns = {
 
         //spawn creep, if conditions are correct
         if(workerCreeps.length < 7) {
-            spawn.createCreep(bodyParts,null,{job: null, target: null, working: false});
+            spawn.createCreep(bodyParts, null, {class: 'worker', job: null, target: null, working: false});
         }
         //emergency recovery creeps in case of genocide, prevents minimal energy amounts/
         //no production from halting the colony for extended period
         if(workerCreeps.length == 0) {
-            spawn.createCreep([WORK,CARRY,MOVE], null, {job: null, target: null, working: false});
+            spawn.createCreep([WORK,CARRY,MOVE], null, {class: 'army', job: null, target: null, working: false});
         }
     },
 }

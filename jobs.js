@@ -45,7 +45,7 @@ var jobs = {
       }
     },
 
-    towerCaddy: function(creep) {
+    fillTowers: function(creep) {
       if(creep.memory.working && creep.carry.energy == 0) {
             creep.memory.working = false;
             creep.memory.job = null;
@@ -71,7 +71,7 @@ var jobs = {
             creep.memory.working = false
           }
         }
-          //if there is a non-full extension/spawn/tower:
+          //if there is a non-full tower:
           if(creep.memory.target != null) {
             //transfer energy into it
             if(creep.transfer(Game.getObjectById(creep.memory.target), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -123,27 +123,29 @@ var jobs = {
 
     if(creep.memory.working && creep.carry.energy == 0) {
           creep.memory.working = false;
-          creep.memory.target = null;
           creep.memory.job = null;
     }
     if(!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
         creep.memory.working = true;
     }
 
-    if(creep.memory.working) {
-      var repairTarget = Game.getObjectById(creep.memory.target);
+    if (creep.memory.target) {
+      if(creep.memory.working) {
+        var repairTarget = Game.getObjectById(creep.memory.target);
 
-      if(creep.repair(repairTarget) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(repairTarget);
+        if(creep.repair(repairTarget) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(repairTarget);
+        }
+
+        if(repairTarget.hits == repairTarget.hitsMax) {
+            creep.memory.target = null;
+            creep.memory.job = null;
+        }
+      } else {
+        jobs.collectEnergy(creep);
       }
-
-      if(repairTarget.hits == repairTarget.hitsMax) {
-          creep.memory.target = null;
-          creep.memory.job = null;
-      }
-
     } else {
-      jobs.collectEnergy(creep);
+      creep.memory.job = null;
     }
   },
 
@@ -184,25 +186,11 @@ var check = creep.claimController(creep.room.controller);
     }
   },
 
-  buildSpawn: function(creep, flag) {
+  helpRoom: function(creep, flag) {
     if (creep.room != flag.room || creep.pos.x > 48 || creep.pos.y > 48 ||creep.pos.x < 1 ||creep.pos.y < 1) {
       creep.moveTo(flag);
-    } else {
-      if (creep.memory.target == null) {
-        var target = creep.room.find(FIND_CONSTRUCTION_SITES, {filter: (site) => {
-              return (site.structureType == STRUCTURE_SPAWN)}});
-        if (target == null) {
-          if (creep.room.find(FIND_MY_SPAWNS)) {
-            flag.remove();
-            creep.job = null;
-          }
-        } else {
-          creep.memory.target = target.id;
-          jobs.buildStructures(creep);
-        }
-      } else {
-        jobs.buildStructures(creep);
-      }
+    } else if (creep.memory.job == 'moving') {
+      creep.memory.job = null;
     }
   },
 
