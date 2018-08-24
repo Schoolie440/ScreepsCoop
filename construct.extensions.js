@@ -115,8 +115,9 @@ var constructExtensions = {
             // build extension array
             var extensionsCreated = 0;
 
-            for (n=entryRoad+1; n<=entryRoad + depositPath; n++) { //start at end of entry road, step over each point in deposit path
-
+            // for (n=entryRoad+1; n<=entryRoad + depositPath; n++) { //start at end of entry road, step over each point in deposit path
+            var n=entryRoad+1;
+            while (extensionsCreated < maxExtensions) {
               var x = baseX + clearestOffset[0] * n;
               var y = baseY + clearestOffset[1] * n;
 
