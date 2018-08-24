@@ -26,16 +26,16 @@ var handlerSpawns = {
         }
 
         switch (true) {
-          case: worksInRoom == 0
+          case worksInRoom == 0:
             bodyPartCap = 3;
             break;
-          case: worksInRoom < 3
+          case worksInRoom < 3:
             bodyPartCap = 6;
             break;
-          case: worksInRoom < 6
+          case worksInRoom < 6:
             bodyPartCap = 9
             break;
-          case: worksInRoom < 12
+          case worksInRoom < 12:
             bodyPartCap = 12
             break;
           default:
