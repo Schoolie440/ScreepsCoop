@@ -133,17 +133,21 @@ var constructExtensions = {
               ]
 
               var eo = 0;
-              while (extensionsCreated < maxExtensions && eo < extensionOffsets.length) { // build extensions for each deposit path point, until all extensions are built
+              while (eo < extensionOffsets.length) { // build extensions for each deposit path point, until all extensions are built
 
                 var eoX = clearestOffset[0] * extensionOffsets[eo][0];
                 var eoY = clearestOffset[1] * extensionOffsets[eo][1];
 
                 room.visual.circle(x + eoX, y + eoY, {stroke: 'blue'});
-                room.createConstructionSite(x + eoX, y + eoY, STRUCTURE_EXTENSION); // build extension
-                extensionsCreated++;
+                var result = room.createConstructionSite(x + eoX, y + eoY, STRUCTURE_EXTENSION); // build extension
+                console.log(result);
+                if (result === 0) {
+                  extensionsCreated++;
+                }
                 eo++;
 
               }
+              n++;
             }
 
             room.memory.lastMaxExtensions = maxExtensions; // store for change detection
