@@ -1,56 +1,53 @@
-var handlerSpawns = {
-    run: function(spawn) {
+let handlerSpawns = {
+  run: spawn => {
+    //Currently finds all creeps since right now all creeps are worker creeps
+    //find all types of creeps for counting purposes
+    // let workerCreeps = spawn.room.find(FIND_MY_CREEPS);
+    let workerCreeps = _.filter(spawn.room.find(FIND_MY_CREEPS), creep => creep.memory.job != 'defender')
 
-        //Currently finds all creeps since right now all creeps are worker creeps
-        //find all types of creeps for counting purposes
-        // var workerCreeps = spawn.room.find(FIND_MY_CREEPS);
-        var workerCreeps = _.filter(spawn.room.find(FIND_MY_CREEPS), (creep) => creep.memory.job != 'defender');
+    //determine desired amounts of each body part
+    let energyCap = spawn.room.energyCapacityAvailable
+    let fifties = Math.floor(energyCap / 50)
+    let works = Math.floor((fifties * 1) / 4)
+    let carries = Math.floor((fifties * 1) / 4)
+    let moves = Math.floor((fifties * 1) / 4)
 
-        //determine desired amounts of each body part
-        var energyCap = spawn.room.energyCapacityAvailable;
-        var fifties = Math.floor(energyCap/50);
-        var works = Math.floor(fifties*1/4);
-        var carries = Math.floor(fifties*1/4);
-        var moves = Math.floor(fifties*1/4);
+    let bodyPartCap = 15
 
-        var bodyPartCap = 15;
+    if (works + carries + moves > bodyPartCap) {
+      works = carries = moves = bodyPartCap / 3
+    }
 
-        if(works+carries+moves > bodyPartCap) {
-            works = carries = moves = bodyPartCap/3;
-        }
+    let bodyParts = []
 
-        var bodyParts = [];
+    //push desired number of each body part to array
+    for (let i = 0; i < works; i++) {
+      bodyParts.push(WORK)
+    }
+    for (let i = 0; i < carries; i++) {
+      bodyParts.push(CARRY)
+    }
+    for (let i = 0; i < moves; i++) {
+      bodyParts.push(MOVE)
+    }
 
-        //push desired number of each body part to array
-        for(var i=0; i<works; i++) {
-            bodyParts.push(WORK);
-        }
-        for(var i=0; i<carries; i++) {
-            bodyParts.push(CARRY);
-        }
-        for(var i=0; i<moves; i++) {
-            bodyParts.push(MOVE);
-        }
+    if (Memory.needClaimer == true) {
+      let check = spawn.createCreep([MOVE, CLAIM], null, { job: 'claim' })
+      if (check == OK) {
+        Game.memory.needClaimer = false
+      }
+    }
 
-        var make = false;
-
-        if(Memory.needClaimer == true) {
-          var check = spawn.createCreep([MOVE,CLAIM], null, {job: 'claim'});
-          if (check == OK) {
-            Game.memory.needClaimer = false;
-          }
-        }
-
-        //spawn creep, if conditions are correct
-        if(workerCreeps.length < 7) {
-            spawn.createCreep(bodyParts, null, {class: 'worker', job: null, target: null, working: false});
-        }
-        //emergency recovery creeps in case of genocide, prevents minimal energy amounts/
-        //no production from halting the colony for extended period
-        if(workerCreeps.length == 0) {
-            spawn.createCreep([WORK,CARRY,MOVE], null, {class: 'army', job: null, target: null, working: false});
-        }
-    },
+    //spawn creep, if conditions are correct
+    if (workerCreeps.length < 7) {
+      spawn.createCreep(bodyParts, null, { class: 'worker', job: null, target: null, working: false })
+    }
+    //emergency recovery creeps in case of genocide, prevents minimal energy amounts/
+    //no production from halting the colony for extended period
+    if (workerCreeps.length == 0) {
+      spawn.createCreep([WORK, CARRY, MOVE], null, { class: 'army', job: null, target: null, working: false })
+    }
+  },
 }
 
-module.exports = handlerSpawns;
+module.exports = handlerSpawns
