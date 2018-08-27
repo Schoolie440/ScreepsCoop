@@ -1,5 +1,6 @@
 var towerControls = require('tower.controls')
 var constructRoads = require('construct.roads')
+var constructExtensions = require('construct.extensions')
 var handlerSpawns = require('handler.spawns')
 var handlerArmySpawn = require('handler.armySpawn')
 var workerManager = require('workerManager')
