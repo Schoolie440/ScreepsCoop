@@ -181,7 +181,9 @@ var check = creep.claimController(creep.room.controller);
       if (check == ERR_NOT_IN_RANGE) {
         creep.moveTo(creep.room.controller);
       } else if (check == OK) {
+        creep.room.createConstructionSite(flag.pos.x, flag.pos.y, STRUCTURE_SPAWN)
         flag.remove();
+        creep.room.createFlag(25,25,'helpRoom');
       }
     }
   },
