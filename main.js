@@ -15,6 +15,8 @@ module.exports.loop = () => {
       workerCreeps.push(Game.creeps[creepName].id)
     } else if (Game.creeps[creepName].memory.class == 'army') {
       armyCreeps.push(Game.creeps[creepName].id)
+    } else if (Game.creeps[creepName].memory.job == 'claim') {
+      Memory.needClaimer = false;
     }
   }
 
