@@ -1,6 +1,10 @@
+const utilityFunctions = require('utilityFunctions')
 
-utilityFunctions = require('utilityFunctions');
-
+let constructExtensions = {
+  run: room => {
+    //TODO Remember source in memory, only run find one time
+    //find spawns
+    let spawners = room.find(FIND_MY_SPAWNS)
 
 var constructExtensions = {
     run: function(room) {
@@ -154,6 +158,7 @@ var constructExtensions = {
             room.memory.forceExtensions = false // reset manual trigger (comment to persist)
         }
     }
+  },
 }
 
-module.exports = constructExtensions;
+module.exports = constructExtensions
