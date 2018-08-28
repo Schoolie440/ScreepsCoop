@@ -4,6 +4,8 @@
       var controllerLevel = room.controller.level;
       var maxExtensions = CONTROLLER_STRUCTURES['extension'][controllerLevel];  // get max count from constant definitions
 
+      room.memory.forceExtensions = true;
+      // room.memory.forceExtensions = false;
 
       if (room.memory.lastMaxExtensions != maxExtensions || room.memory.forceExtensions) { // forceExtensions is a manual override for development
 
@@ -23,6 +25,8 @@
           // flag based positioning
           let roomFlags = room.find(FIND_FLAGS);
 
+          var flagFound = false;
+
           for (let f in roomFlags) {
             let flag = roomFlags[f];
 
@@ -30,53 +34,56 @@
               let baseFlag = flag;
               var baseX = baseFlag.pos.x;
               var baseY = baseFlag.pos.y;
-              var clearestOffset = [-1,1];
+              var arrayOffset = [-1,1];
+              flagFound = true;
             }
           }
 
-          // visualize path between source and extension array
-          for (n=1; n<=entryRoad; n++) {
-            var pos = new RoomPosition(baseX + clearestOffset[0] * n, baseY + clearestOffset[1] * n, room.name);
+          if (flagFound) {
+            // visualize path between source and extension array
+            for (n=1; n<=entryRoad; n++) {
+              var pos = new RoomPosition(baseX + arrayOffset[0] * n, baseY + arrayOffset[1] * n, room.name);
 
-            room.visual.circle(pos, {stroke: 'orange'});
-            pos.createConstructionSite(STRUCTURE_ROAD);
-          }
+              room.visual.circle(pos, {stroke: 'orange'});
+              pos.createConstructionSite(STRUCTURE_ROAD);
+            }
 
-          // build extension array
-          var extensionsCreated = 0;
+            // build extension array
+            var extensionsCreated = 0;
 
-          var n=entryRoad+1;
-          while (extensionsCreated < extensionsToBuild) {
-            var x = baseX + clearestOffset[0] * n;
-            var y = baseY + clearestOffset[1] * n;
+            var n=entryRoad+1;
+            while (extensionsCreated < extensionsToBuild) {
+              var x = baseX + arrayOffset[0] * n;
+              var y = baseY + arrayOffset[1] * n;
 
-            room.visual.circle(x, y, {stroke: 'green'}); // deposit road
-            room.createConstructionSite(x, y, STRUCTURE_ROAD); // build deposit road
+              room.visual.circle(x, y, {stroke: 'green'}); // deposit road
+              room.createConstructionSite(x, y, STRUCTURE_ROAD); // build deposit road
 
-            // array of offsets from each deposit path point to extension locations
-            let extensionOffsets = [
-              [1, 0],
-              [0, 1],
-              [1, -1],
-              [-1, 1],
-            ]
+              // array of offsets from each deposit path point to extension locations
+              let extensionOffsets = [
+                [1, 0],
+                [0, 1],
+                [1, -1],
+                [-1, 1],
+              ]
 
-            var eo = 0;
-            while (eo < extensionOffsets.length) { // build extensions for each deposit path point, until all extensions are built
+              var eo = 0;
+              while (eo < extensionOffsets.length) { // build extensions for each deposit path point, until all extensions are built
 
-              var eoX = clearestOffset[0] * extensionOffsets[eo][0];
-              var eoY = clearestOffset[1] * extensionOffsets[eo][1];
+                var eoX = arrayOffset[0] * extensionOffsets[eo][0];
+                var eoY = arrayOffset[1] * extensionOffsets[eo][1];
 
-              room.visual.circle(x + eoX, y + eoY, {stroke: 'blue'});
-              var result = room.createConstructionSite(x + eoX, y + eoY, STRUCTURE_EXTENSION); // build extension
+                room.visual.circle(x + eoX, y + eoY, {stroke: 'blue'});
+                var result = room.createConstructionSite(x + eoX, y + eoY, STRUCTURE_EXTENSION); // build extension
+                console.log(result)
+                if ((result === 0) || (result == -14)) {
+                  extensionsCreated++;
+                }
+                eo++;
 
-              if (result === 0) {
-                extensionsCreated++;
               }
-              eo++;
-
+              n++;
             }
-            n++;
           }
 
           room.memory.lastMaxExtensions = maxExtensions; // store for change detection
