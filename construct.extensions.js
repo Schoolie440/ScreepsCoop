@@ -1,11 +1,9 @@
-
   let constructExtensions = {
     run: room => {
 
       var controllerLevel = room.controller.level;
       var maxExtensions = CONTROLLER_STRUCTURES['extension'][controllerLevel];  // get max count from constant definitions
 
-      // room.memory.forceExtensions = true;
 
       if (room.memory.lastMaxExtensions != maxExtensions || room.memory.forceExtensions) { // forceExtensions is a manual override for development
 
@@ -13,10 +11,7 @@
               filter: { structureType: STRUCTURE_EXTENSION }
           });
 
-
-
           var extensionCount = extensions.length;
-
           var extensionsToBuild = maxExtensions - extensionCount;
 
           if (extensionCount < maxExtensions) {
@@ -26,9 +21,13 @@
           var entryRoad = 1; // length of road between source and extension array
 
           // flag based positioning
-          for (let name in Game.flags) {
-            if (name == 'extensionBase_angle3') {
-              let baseFlag = Game.flags[name]
+          let roomFlags = room.find(FIND_FLAGS);
+
+          for (let f in roomFlags) {
+            let flag = roomFlags[f];
+
+            if (flag.name == 'extensionBase_angle3') {
+              let baseFlag = flag;
               var baseX = baseFlag.pos.x;
               var baseY = baseFlag.pos.y;
               var clearestOffset = [-1,1];
@@ -47,7 +46,7 @@
           var extensionsCreated = 0;
 
           var n=entryRoad+1;
-          while (extensionsCreated < maxExtensions) {
+          while (extensionsCreated < extensionsToBuild) {
             var x = baseX + clearestOffset[0] * n;
             var y = baseY + clearestOffset[1] * n;
 
