@@ -26,15 +26,34 @@
           let roomFlags = room.find(FIND_FLAGS);
 
           var flagFound = false;
+          var arrayOffset = null;
 
           for (let f in roomFlags) {
             let flag = roomFlags[f];
 
             if (flag.name == 'extensionBase_angle3') {
+              switch(flag.name) {
+                case 'extensionBase_NE':
+                  arrayOffset = [-1,1];
+                  flagFound = true;
+                  break;
+                case 'extensionBase_NW':
+                  arrayOffset = [-1,1];
+                  flagFound = true;
+                  break;
+                case 'extensionBase_SW':
+                  arrayOffset = [-1,1];
+                  flagFound = true;
+                  break;
+                case 'extensionBase_SE':
+                  arrayOffset = [-1,1];
+                  flagFound = true;
+                  break;
+              }
+
               let baseFlag = flag;
               var baseX = baseFlag.pos.x;
               var baseY = baseFlag.pos.y;
-              var arrayOffset = [-1,1];
               flagFound = true;
             }
           }
