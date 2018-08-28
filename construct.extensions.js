@@ -4,7 +4,7 @@
       var controllerLevel = room.controller.level;
       var maxExtensions = CONTROLLER_STRUCTURES['extension'][controllerLevel];  // get max count from constant definitions
 
-      room.memory.forceExtensions = true;
+      // room.memory.forceExtensions = true;
       // room.memory.forceExtensions = false;
 
       if (room.memory.lastMaxExtensions != maxExtensions || room.memory.forceExtensions) { // forceExtensions is a manual override for development
