@@ -7,6 +7,9 @@
       // room.memory.forceExtensions = true;
       // room.memory.forceExtensions = false;
 
+      // var displayOnly = true;
+      var displayOnly = false;
+
       if (room.memory.lastMaxExtensions != maxExtensions || room.memory.forceExtensions) { // forceExtensions is a manual override for development
 
           var extensions = room.find(FIND_MY_STRUCTURES, {
@@ -20,7 +23,7 @@
             console.log('need to build ' + (extensionsToBuild) + ' extensions in room ' + room.name);
           }
 
-          var entryRoad = 1; // length of road between source and extension array
+          var entryRoad = 0; // length of road between source and extension array
 
           // flag based positioning
           let roomFlags = room.find(FIND_FLAGS);
@@ -29,42 +32,40 @@
           var arrayOffset = null;
 
           for (let f in roomFlags) {
-            let flag = roomFlags[f];
+            var flag = roomFlags[f];
 
-            if (flag.name == 'extensionBase_angle3') {
-              switch(flag.name) {
-                case 'extensionBase_NE':
-                  arrayOffset = [-1,1];
-                  flagFound = true;
-                  break;
-                case 'extensionBase_NW':
-                  arrayOffset = [-1,1];
-                  flagFound = true;
-                  break;
-                case 'extensionBase_SW':
-                  arrayOffset = [-1,1];
-                  flagFound = true;
-                  break;
-                case 'extensionBase_SE':
-                  arrayOffset = [-1,1];
-                  flagFound = true;
-                  break;
-              }
-
-              let baseFlag = flag;
-              var baseX = baseFlag.pos.x;
-              var baseY = baseFlag.pos.y;
-              flagFound = true;
+            switch(flag.name) {
+              case 'eb_NE':
+                arrayOffset = [1,-1];
+                flagFound = true;
+                break;
+              case 'eb_NW':
+                arrayOffset = [-1,-1];
+                flagFound = true;
+                break;
+              case 'eb_SE':
+                arrayOffset = [1,1];
+                flagFound = true;
+                break;
+              case 'eb_SW':
+                arrayOffset = [-1,1];
+                flagFound = true;
+                break;
             }
           }
 
           if (flagFound) {
+
+            let baseFlag = flag;
+            var baseX = baseFlag.pos.x;
+            var baseY = baseFlag.pos.y;
+
             // visualize path between source and extension array
             for (n=1; n<=entryRoad; n++) {
               var pos = new RoomPosition(baseX + arrayOffset[0] * n, baseY + arrayOffset[1] * n, room.name);
 
               room.visual.circle(pos, {stroke: 'orange'});
-              pos.createConstructionSite(STRUCTURE_ROAD);
+              if (!displayOnly) {pos.createConstructionSite(STRUCTURE_ROAD);}
             }
 
             // build extension array
@@ -76,7 +77,7 @@
               var y = baseY + arrayOffset[1] * n;
 
               room.visual.circle(x, y, {stroke: 'green'}); // deposit road
-              room.createConstructionSite(x, y, STRUCTURE_ROAD); // build deposit road
+              if (!displayOnly) {room.createConstructionSite(x, y, STRUCTURE_ROAD);} // build deposit road
 
               // array of offsets from each deposit path point to extension locations
               let extensionOffsets = [
@@ -93,9 +94,14 @@
                 var eoY = arrayOffset[1] * extensionOffsets[eo][1];
 
                 room.visual.circle(x + eoX, y + eoY, {stroke: 'blue'});
-                var result = room.createConstructionSite(x + eoX, y + eoY, STRUCTURE_EXTENSION); // build extension
-                console.log(result)
-                if ((result === 0) || (result == -14)) {
+                if (!displayOnly) {
+                  var result = room.createConstructionSite(x + eoX, y + eoY, STRUCTURE_EXTENSION); // build extension
+                  console.log(result)
+                  if ((result === 0) || (result == -14)) {
+                    extensionsCreated++;
+                  }
+                }
+                else {
                   extensionsCreated++;
                 }
                 eo++;
