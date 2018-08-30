@@ -12,7 +12,32 @@ let handlerSpawns = {
     let carries = Math.floor((fifties * 1) / 4)
     let moves = Math.floor((fifties * 1) / 4)
 
-    let bodyPartCap = 15
+    let bodyPartCap;
+         //Not a huge fan of this since it runs in On^2 time
+        let worksInRoom = 0;
+        for (let creep in workerCreeps) {
+          for (let part in creep.body) {
+            if (creep.body[part].type == WORK) {
+              worksInRoom++;
+            }
+          }
+        }
+         switch (true) {
+          case: worksInRoom == 0
+            bodyPartCap = 3;
+            break;
+          case: worksInRoom < 3
+            bodyPartCap = 6;
+            break;
+          case: worksInRoom < 6
+            bodyPartCap = 9
+            break;
+          case: worksInRoom < 12
+            bodyPartCap = 12
+            break;
+          default:
+            bodyPartCap = 15;
+        }
 
     if (works + carries + moves > bodyPartCap) {
       works = carries = moves = bodyPartCap / 3
