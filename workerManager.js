@@ -14,7 +14,7 @@ let workerManager = {
       room.memory.activeBuilders = 0
       room.memory.activeCaddies = 0
       room.memory.activeTargets = []
-      room.memory.availableCreeps = []
+      room.memory.availableWorkerCreeps = []
     }
 
     /*Checks through all creeps. If the creep has a job,
@@ -54,7 +54,7 @@ let workerManager = {
         jobs.defendBase(creep)
         job_tracker.defend++
       } else if (creep.memory.job == null) {
-        creep.room.memory.availableCreeps.push(creep.id)
+        creep.room.memory.availableWorkerCreeps.push(creep.id)
         job_tracker.open++
       }
     }
@@ -64,13 +64,13 @@ let workerManager = {
     for (let roomName in Game.rooms) {
       let room = Game.rooms[roomName]
       let energyNeeded = room.energyCapacityAvailable - room.energyAvailable - room.memory.activeEnergy
-      while (energyNeeded > 0 && room.memory.availableCreeps.length > 0) {
-        let newCreep = Game.getObjectById(room.memory.availableCreeps[0])
+      while (energyNeeded > 0 && room.memory.availableWorkerCreeps.length > 0) {
+        let newCreep = Game.getObjectById(room.memory.availableWorkerCreeps[0])
         newCreep.memory.job = 'store'
         newCreep.memory.source = workerManager.findCloseSource(newCreep)
         jobs.storeEnergy(newCreep)
         energyNeeded -= newCreep.carryCapacity
-        room.memory.availableCreeps.shift()
+        room.memory.availableWorkerCreeps.shift()
       }
       let towers = room.find(FIND_STRUCTURES, {
         filter: structure => {
@@ -78,58 +78,58 @@ let workerManager = {
         },
       })
 
-      while (room.memory.availableCreeps.length > 0 && room.memory.activeCaddies < CADDY_LIMIT && towers != null) {
-        let newCreep = Game.getObjectById(room.memory.availableCreeps[0])
+      while (room.memory.availableWorkerCreeps.length > 0 && room.memory.activeCaddies < CADDY_LIMIT && towers != null) {
+        let newCreep = Game.getObjectById(room.memory.availableWorkerCreeps[0])
         newCreep.memory.job = 'caddy'
         newCreep.memory.source = workerManager.findCloseSource(newCreep)
         room.memory.activeCaddies++
         jobs.fillTowers(newCreep)
-        room.memory.availableCreeps.shift()
+        room.memory.availableWorkerCreeps.shift()
       }
 
-      if (room.memory.availableCreeps.length > 0 && room.memory.activeBuilders < BUILDER_LIMIT) {
+      if (room.memory.availableWorkerCreeps.length > 0 && room.memory.activeBuilders < BUILDER_LIMIT) {
         var buildTargets = room.find(FIND_CONSTRUCTION_SITES)
         buildTargets.sort((b, a) => a.hits / a.hitsMax - b.hits / b.hitsMax)
 
-        while (buildTargets.length && room.memory.availableCreeps.length > 0 && room.memory.activeBuilders < BUILDER_LIMIT) {
-          var newCreep = Game.getObjectById(room.memory.availableCreeps[0])
+        while (buildTargets.length && room.memory.availableWorkerCreeps.length > 0 && room.memory.activeBuilders < BUILDER_LIMIT) {
+          var newCreep = Game.getObjectById(room.memory.availableWorkerCreeps[0])
           newCreep.memory.job = 'build'
           newCreep.memory.target = buildTargets[0].id
           newCreep.memory.source = workerManager.findCloseSource(newCreep)
           jobs.buildStructures(newCreep)
           room.memory.activeBuilders += 1
-          room.memory.availableCreeps.shift()
+          room.memory.availableWorkerCreeps.shift()
         }
       }
 
-      if (room.memory.availableCreeps.length > 0) {
+      if (room.memory.availableWorkerCreeps.length > 0) {
         let repairTargets = room.find(FIND_STRUCTURES, {
           filter: structure => {
             return (
               (structure.structureType == STRUCTURE_ROAD || structure.structureType == STRUCTURE_CONTAINER) &&
-              structure.hits < structure.hitsMax - Game.getObjectById(room.memory.availableCreeps[0]).carryCapacity
+              structure.hits < structure.hitsMax - Game.getObjectById(room.memory.availableWorkerCreeps[0]).carryCapacity
             )
           },
         })
         //sort weakest to strongest
         repairTargets.sort((a, b) => a.hits / a.hitsMax - b.hits / b.hitsMax)
 
-        while (repairTargets.length > 0 && room.memory.availableCreeps.length > 0) {
-          let newCreep = Game.getObjectById(room.memory.availableCreeps[0])
+        while (repairTargets.length > 0 && room.memory.availableWorkerCreeps.length > 0) {
+          let newCreep = Game.getObjectById(room.memory.availableWorkerCreeps[0])
           if (!room.memory.activeTargets.includes(repairTargets[0].id)) {
             newCreep.memory.job = 'repair'
             newCreep.memory.target = repairTargets[0].id
             newCreep.memory.source = workerManager.findCloseSource(newCreep)
             jobs.repairStructures(newCreep)
-            room.memory.availableCreeps.shift()
+            room.memory.availableWorkerCreeps.shift()
           }
           repairTargets.shift()
         }
       }
 
-      if (room.memory.availableCreeps.length > 0) {
-        for (let creepID in room.memory.availableCreeps) {
-          let newCreep = Game.getObjectById(room.memory.availableCreeps[creepID])
+      if (room.memory.availableWorkerCreeps.length > 0) {
+        for (let creepID in room.memory.availableWorkerCreeps) {
+          let newCreep = Game.getObjectById(room.memory.availableWorkerCreeps[creepID])
           newCreep.memory.job = 'upgrade'
           newCreep.memory.source = workerManager.findCloseSource(newCreep)
           jobs.upgradeController(newCreep)

@@ -32,6 +32,7 @@ module.exports.loop = () => {
     towerControls.attack(towers[i])
   }
 
+
   if (Game.time % 20 == 0) {
     //loops through all spawns and runs auto spawn module
     for (let i in Game.spawns) {
@@ -40,7 +41,7 @@ module.exports.loop = () => {
 
       //if enemies present, shut down regular creep production, start military
       if (enemies.length) {
-        handlerArmySpawn.run(Game.spawns[(i, armyCreeps)])
+        handlerArmySpawn.spawnDefenders(Game.spawns[i], armyCreeps)
       } else {
         handlerSpawns.run(Game.spawns[i], workerCreeps)
       }
@@ -59,6 +60,8 @@ module.exports.loop = () => {
       expansionFunctions.roomCapture(Game.flags[name])
     } else if (name == 'roomHelp') {
       expansionFunctions.roomHelp(Game.flags[name])
+    } else if (name == 'attackRoom') {
+      expansionFunctions.attackRoom(Game.flags[name])
     }
   }
 

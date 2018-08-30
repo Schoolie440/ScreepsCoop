@@ -18,7 +18,7 @@ let expansionFunctions = {
     }
   },
 
-  roomHelp: function(flag) {
+  roomHelp: flag => {
     let roomHelper
     for (let creepName in Game.creeps) {
       if (Game.creeps[creepName].memory.assignment == 'helpRoom') {
@@ -41,6 +41,10 @@ let expansionFunctions = {
     } else {
       jobs.helpRoom(roomHelper, flag)
     }
+  },
+
+  attackRoom: flag => {
+    
   },
 }
 

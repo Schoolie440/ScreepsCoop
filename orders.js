@@ -16,6 +16,10 @@ let orders = {
       }
     }
   },
+
+  attackBase: creep => {
+    
+  },
 }
 
 module.exports = orders

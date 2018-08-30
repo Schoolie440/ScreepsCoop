@@ -11,9 +11,10 @@ let armyManager = {
       let creep = Game.getObjectById(armyCreeps[i])
       if (creep.memory.order == 'defend') {
         orders.defendBase(creep)
-      } else {
-        creep.memory.order = 'defend'
-        orders.defendBase(creep)
+      } else if (creep.memory.order == 'attack') {
+        orders.attackBase(creep)
+      } else if (creep.memory.order == null) {
+        creep.room.memory.availableArmyCreeps.push(creep.id)
       }
     }
   },

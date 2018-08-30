@@ -1,5 +1,5 @@
 let handlerArmySpawn = {
-  run: (spawn, armyCreeps) => {
+  spawnDefenders: (spawn, armyCreeps) => {
     //determines desired number of each body part
     let energyCap = spawn.room.energyCapacityAvailable
     let hundreds = Math.floor(energyCap / 100)
@@ -35,9 +35,13 @@ let handlerArmySpawn = {
 
     //spawn armyCreeps, if conditions are correct
     if (make) {
-      console.log('Spawning Defender')
+      console.log('Spawning defender')
       spawn.createCreep(bodyParts, null, { class: 'army', order: newOrder })
     }
+  },
+
+  spawnAttackers: (spawn, armyCreeps) => {
+    
   },
 }
 
