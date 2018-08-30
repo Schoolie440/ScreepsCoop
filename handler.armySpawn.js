@@ -20,23 +20,23 @@ let handlerArmySpawn = {
       bodyParts.push(ATTACK)
     }
 
-    let newJob
+    let newOrder
     let make = false
 
-    //construct armyCreeps, little fast ones first, then big ones
-    if (armyCreeps.length < 3) {
-      newJob = 'defender'
+    //construct armyCreeps, little fast one first, then big ones
+    if (armyCreeps.length < 1) {
+      newOrder = 'defender'
       bodyParts = [MOVE, MOVE, ATTACK, ATTACK]
       make = true
     } else if (armyCreeps.length < 6) {
-      newJob = 'defender'
+      newOrder = 'defender'
       make = true
     }
 
     //spawn armyCreeps, if conditions are correct
     if (make) {
       console.log('Spawning Defender')
-      spawn.createCreep(bodyParts, null, { class: 'army', job: newJob })
+      spawn.createCreep(bodyParts, null, { class: 'army', order: newOrder })
     }
   },
 }
