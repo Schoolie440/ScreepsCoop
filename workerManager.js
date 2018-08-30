@@ -67,6 +67,7 @@ let workerManager = {
       while (energyNeeded > 0 && room.memory.availableCreeps.length > 0) {
         let newCreep = Game.getObjectById(room.memory.availableCreeps[0])
         newCreep.memory.job = 'store'
+        newCreep.memory.source = workerManager.findCloseSource(newCreep)
         jobs.storeEnergy(newCreep)
         energyNeeded -= newCreep.carryCapacity
         room.memory.availableCreeps.shift()
@@ -80,6 +81,7 @@ let workerManager = {
       while (room.memory.availableCreeps.length > 0 && room.memory.activeCaddies < CADDY_LIMIT && towers != null) {
         let newCreep = Game.getObjectById(room.memory.availableCreeps[0])
         newCreep.memory.job = 'caddy'
+        newCreep.memory.source = workerManager.findCloseSource(newCreep)
         room.memory.activeCaddies++
         jobs.fillTowers(newCreep)
         room.memory.availableCreeps.shift()
@@ -93,6 +95,7 @@ let workerManager = {
           var newCreep = Game.getObjectById(room.memory.availableCreeps[0])
           newCreep.memory.job = 'build'
           newCreep.memory.target = buildTargets[0].id
+          newCreep.memory.source = workerManager.findCloseSource(newCreep)
           jobs.buildStructures(newCreep)
           room.memory.activeBuilders += 1
           room.memory.availableCreeps.shift()
@@ -116,6 +119,7 @@ let workerManager = {
           if (!room.memory.activeTargets.includes(repairTargets[0].id)) {
             newCreep.memory.job = 'repair'
             newCreep.memory.target = repairTargets[0].id
+            newCreep.memory.source = workerManager.findCloseSource(newCreep)
             jobs.repairStructures(newCreep)
             room.memory.availableCreeps.shift()
           }
@@ -127,11 +131,21 @@ let workerManager = {
         for (let creepID in room.memory.availableCreeps) {
           let newCreep = Game.getObjectById(room.memory.availableCreeps[creepID])
           newCreep.memory.job = 'upgrade'
+          newCreep.memory.source = workerManager.findCloseSource(newCreep)
           jobs.upgradeController(newCreep)
         }
       }
     }
   },
+
+  findCloseSource: creep => {
+    let source = creep.pos.findClosestByRange(FIND_SOURCES, {
+      filter: source => {
+        return source.energy > 0
+      },
+    })
+    return source.id;
+  }
 }
 
 module.exports = workerManager

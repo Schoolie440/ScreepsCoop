@@ -190,13 +190,16 @@ let jobs = {
   },
 
   collectEnergy: creep => {
-    let source = creep.pos.findClosestByRange(FIND_SOURCES, {
-      filter: source => {
-        return source.energy > 0
-      },
-    })
-    if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+    let source = Game.getObjectById(creep.memory.source)
+
+    let check = creep.harvest(source)
+
+    if (check == ERR_NOT_IN_RANGE) {
       creep.moveTo(source)
+    } else if (check == ERR_NOT_ENOUGH_RESOURCES) {
+      creep.memory.working = true;
+    } else if (check != OK) {
+      creep.memory.job = null
     }
   },
   defendBase: creep => {
