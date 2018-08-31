@@ -15,6 +15,11 @@ module.exports = {
     STRUCTURE_TOWER: false,
     FIND_FLAGS: false,
     FIND_HOSTILE_CREEPS: false,
+    FIND_CONSTRUCTION_SITES: false,
+    FIND_STRUCTURES: false,
+    RESOURCE_ENERGY: false,
+    STRUCTURE_CONTAINER: false,
+    FIND_SOURCES: false,
   },
   extends: 'eslint:recommended',
   parserOptions: {
