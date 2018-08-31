@@ -77,8 +77,8 @@ let workerManager = {
           return structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity
         },
       })
-
-      while (room.memory.availableCreeps.length > 0 && room.memory.activeCaddies < CADDY_LIMIT && towers != null) {
+      
+      while (room.memory.availableCreeps.length > 0 && room.memory.activeCaddies < CADDY_LIMIT && towers.length != null) {
         let newCreep = Game.getObjectById(room.memory.availableCreeps[0])
         newCreep.memory.job = 'caddy'
         newCreep.memory.source = workerManager.findCloseSource(newCreep)
