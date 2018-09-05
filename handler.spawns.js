@@ -16,12 +16,14 @@ let handlerSpawns = {
          //Not a huge fan of this since it runs in On^2 time
         let worksInRoom = 0;
         for (let creep in workerCreeps) {
-          for (let part in creep.body) {
-            if (creep.body[part].type == WORK) {
+          for (let part in workerCreeps[creep].body) {
+            if (workerCreeps[creep].body[part].type == WORK) {
               worksInRoom++;
+              console.log(worksInRoom)
             }
           }
         }
+        console.log(worksInRoom)
          switch (true) {
           case worksInRoom == 0:
             bodyPartCap = 3;
