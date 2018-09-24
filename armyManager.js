@@ -1,24 +1,22 @@
-var orders = require('orders');
+const orders = require('orders')
 
-var armyManager = {
-
-  run: function(armyCreeps) {
-
+let armyManager = {
+  run: armyCreeps => {
     /*Checks through all creeps. If the creep has a job,
     runs its job method. If not, stores creep id in memory
     as an available creep for job assignment
     */
 
-    for(var i in armyCreeps) {
-      var creep = Game.getObjectById(armyCreeps[i]);
-      if(creep.memory.order == 'defend') {
-        orders.defendBase(creep);
+    for (let i in armyCreeps) {
+      let creep = Game.getObjectById(armyCreeps[i])
+      if (creep.memory.order == 'defend') {
+        orders.defendBase(creep)
       } else {
-        creep.memory.order = 'defend';
-        orders.defendBase(creep);
+        creep.memory.order = 'defend'
+        orders.defendBase(creep)
       }
     }
-  }
+  },
 }
 
-module.exports = armyManager;
+module.exports = armyManager
