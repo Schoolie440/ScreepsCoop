@@ -88,8 +88,7 @@ let workerManager = {
       }
 
       if (room.memory.availableCreeps.length > 0 && room.memory.activeBuilders < BUILDER_LIMIT) {
-        var buildTargets = room.find(FIND_CONSTRUCTION_SITES)
-        buildTargets.sort((b, a) => a.hits / a.hitsMax - b.hits / b.hitsMax)
+        var buildTargets = workerManager.getPrioritizedConstructionSites(room);
 
         while (buildTargets.length && room.memory.availableCreeps.length > 0 && room.memory.activeBuilders < BUILDER_LIMIT) {
           var newCreep = Game.getObjectById(room.memory.availableCreeps[0])
@@ -145,6 +144,45 @@ let workerManager = {
       },
     })
     return source.id;
+  },
+
+  getPrioritizedConstructionSites: room => {
+    var buildTargets = room.find(FIND_CONSTRUCTION_SITES);
+    buildTargets.sort((b, a) => a.hits / a.hitsMax - b.hits / b.hitsMax)
+
+    var targetPriority = [
+      STRUCTURE_SPAWN,
+      STRUCTURE_EXTENSION,
+      STRUCTURE_TOWER,
+      STRUCTURE_STORAGE,
+
+      STRUCTURE_KEEPER_LAIR,
+      STRUCTURE_PORTAL,
+      STRUCTURE_CONTROLLER,
+      STRUCTURE_LINK,
+      STRUCTURE_OBSERVER,
+      STRUCTURE_POWER_BANK,
+      STRUCTURE_POWER_SPAWN,
+      STRUCTURE_EXTRACTOR,
+      STRUCTURE_LAB,
+      STRUCTURE_TERMINAL,
+      STRUCTURE_CONTAINER,
+      STRUCTURE_NUKER,
+
+      STRUCTURE_ROAD,
+      STRUCTURE_WALL,
+      STRUCTURE_RAMPART,
+    ]
+
+    var prioritizedTargets = [];
+
+    for (let s in targetPriority) {
+      let structType = targetPriority[s];
+      let filteredTargets = _.filter(buildTargets, target => target.structureType == structType)
+      prioritizedTargets = prioritizedTargets.concat(filteredTargets);
+    }
+
+    return prioritizedTargets;
   }
 }
 
