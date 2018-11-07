@@ -41,7 +41,7 @@ module.exports.loop = () => {
 
       //if enemies present, shut down regular creep production, start military
       if (enemies.length) {
-        handlerArmySpawn.run(Game.spawns[(i, armyCreeps)])
+        handlerArmySpawn.run(Game.spawns[i], armyCreeps)
       } else {
         handlerSpawns.run(Game.spawns[i], workerCreeps)
       }
