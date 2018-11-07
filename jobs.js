@@ -10,20 +10,38 @@ let jobs = {
 
     if (creep.memory.working) {
       if (creep.memory.target == null) {
-        //find nearest non-full depository
-        let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-          filter: structure => {
-            return (
-              (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
-              structure.energy < structure.energyCapacity
-            )
-          },
-        })
-        if (target) {
-          creep.memory.target = target.id
+        if (creep.memory.assignment == 'harvestRoom') {
+          //find nearest non-full depository
+          let target = Game.getObjectById(creep.memory.homeRoom).find(FIND_STRUCTURES, {
+            filter: structure => {
+              return (
+                (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
+                structure.energy < structure.energyCapacity
+              )
+            },
+          })
+          if (target) {
+            creep.memory.target = target.id
+          } else {
+            creep.memory.job = null
+            creep.memory.working = false
+          }
         } else {
-          creep.memory.job = null
-          creep.memory.working = false
+          //find nearest non-full depository
+          let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            filter: structure => {
+              return (
+                (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
+                structure.energy < structure.energyCapacity
+              )
+            },
+          })
+          if (target) {
+            creep.memory.target = target.id
+          } else {
+            creep.memory.job = null
+            creep.memory.working = false
+          }
         }
       }
       //if there is a non-full extension/spawn/tower:
@@ -176,8 +194,21 @@ let jobs = {
       } else if (check == OK) {
         creep.room.createConstructionSite(flag.pos.x, flag.pos.y, STRUCTURE_SPAWN)
         flag.remove();
-        creep.room.createFlag(25,25,'roomHelp');
+        creep.room.createFlag(25,25,'helpRoom');
       }
+    }
+  },
+
+  harvestRoom: (creep, flag) => {
+    if (creep.room != flag.room || creep.pos.x > 48 || creep.pos.y > 48 || creep.pos.x < 1 || creep.pos.y < 1) {
+      creep.moveTo(flag)
+    } else if (creep.memory.job == 'moving') {
+      creep.memory.source = creep.pos.findClosestByRange(FIND_SOURCES, {
+        filter: source => {
+          return source.energy > 0
+        },
+      })
+      creep.memory.job = 'store'
     }
   },
 

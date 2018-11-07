@@ -56,10 +56,12 @@ module.exports.loop = () => {
 
   //See if a captureTarget Flag has been placed
   for (let name in Game.flags) {
-    if (name == 'captureTarget') {
+    if (name == 'captureRoom') {
       expansionFunctions.roomCapture(Game.flags[name])
-    } else if (name == 'roomHelp') {
+    } else if (name == 'helpRoom') {
       expansionFunctions.roomHelp(Game.flags[name])
+    } else if (name == 'harvestRoom') {
+      expansionFunctions.roomHarvest(Game.flags[name])
     }
   }
 
